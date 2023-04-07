@@ -30,7 +30,7 @@ void adicionaVizinho(Rede **rede, string conexao, int custo){
     }else{
         while (q->prox != NULL)
         {
-            cout << "\naqui foi loop!\n";
+            cout << "\naqui foi loop function!\n";
             q = q->prox;
         }
     }
@@ -66,7 +66,7 @@ int main(){
                 cout << "\naqui foi if!\n";
                 adicionaVizinho(&aux, conexao, custo);
             }
-            cout << "\naqui foi loop!\n";
+            cout << "\naqui foi loop main!\n";
         }
     }
     cout << "\naqui foi!\n";
