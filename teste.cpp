@@ -70,6 +70,67 @@ void troca(Vizinho **i, Vizinho **j)
     q->prox = aux.prox;
 }
 
+int pai(int i)
+{
+    return (i - 1) / 2;
+}
+
+int filhoEsq(int i)
+{
+    return 2 * (i + 1) - 1;
+}
+
+int filhoDir(int i)
+{
+    return 2 * (i + 1);
+}
+
+void sobe(Vizinho **minHeap, int i)
+{
+    Vizinho *aux, *p, *f;
+    aux = *minHeap;
+    p = aux + pai(i);
+    f = aux + i;
+
+    while (p->custo > f->custo)
+    {
+        troca(&p, &f);
+        i = pai(i);
+        p = aux + pai(i);
+        f = aux + i;
+    }
+}
+
+void desce(Vizinho **minHeap, int tamanhoHeap, int i)
+{
+    Vizinho *p, *q, *r;
+    p = *minHeap;
+    int e, d, menor, n;
+    n = tamanhoHeap;
+
+    if (i != (n - 1))
+    {
+        e = filhoEsq(i);
+        d = filhoDir(i);
+
+        if (e < n && (p + e)->custo < (p + i)->custo)
+            menor = e;
+        else
+            menor = i;
+
+        if (d < n && (p + d)->custo < (p + menor)->custo)
+            menor = d;
+
+        if (menor != i)
+        {
+            q = p + i;
+            r = p + menor;
+            troca(&q, &r);
+            desce(minHeap, n, i);
+        }
+    }
+}
+
 Vizinho *constroiMinHeap(Vizinho **rede, int tamanhoRede)
 {
     Vizinho *p = *rede;
@@ -81,6 +142,9 @@ Vizinho *constroiMinHeap(Vizinho **rede, int tamanhoRede)
         (minHeap + i)->custo = (p + i)->custo;
         (minHeap + i)->prox = NULL;
     }
+
+    for (int i = tamanhoRede / 2; i > 0; i--)
+        desce(&minHeap, tamanhoRede, i);
     return minHeap;
 }
 
@@ -112,8 +176,18 @@ int estaNoHeap(Vizinho *minHeap, Vizinho *vizinhoDeP, int tamanhoRede)
     return 0;
 }
 
-void diminuiPiroridade(Vizinho **minHeap, Vizinho *vizinhoDeP)
+void diminuiPiroridade(Vizinho **minHeap, Vizinho *vizinhoDeP, int tamanhoHeap)
 {
+    int index;
+    Vizinho *p;
+    p = *minHeap;
+
+    for (int i = 0; i < tamanhoHeap; i++)
+        if (comparaStr((p + i)->ip, vizinhoDeP->ip) == 1)
+            index = i;
+
+    (p + index)->custo = vizinhoDeP->custo;
+    sobe(minHeap, index);
 }
 
 int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
@@ -150,7 +224,7 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
                     if (comparaStr(vizinhoDeP->ip, (p + k)->ip) == 1)
                     {
                         if ((estaNoHeap(minHeap, vizinhoDeP, tamanhoRede) == 1) && (vizinhoDeP->custo < (p + k)->custo))
-                            diminuiPiroridade(&minHeap, vizinhoDeP);
+                            diminuiPiroridade(&minHeap, vizinhoDeP, tamanhoRede);
                     }
                 }
                 vizinhoDeP = vizinhoDeP->prox;
