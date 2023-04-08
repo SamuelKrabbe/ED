@@ -97,14 +97,30 @@ Vizinho extraiMinimo(Vizinho **minHeap, int *tamanhoRede)
 
     troca(&p, &aux);
     (*n)--;
-
     return minimo;
+}
+
+int estaNoHeap(Vizinho *minHeap, Vizinho *vizinhoDeP, int tamanhoRede)
+{
+    Vizinho *p, *q;
+    p = minHeap;
+    q = vizinhoDeP;
+
+    for (int i = 0; i < tamanhoRede; i++)
+        if (comparaStr((p + i)->ip, q->ip) == 1)
+            return 1;
+    return 0;
+}
+
+void diminuiPiroridade(Vizinho **minHeap, Vizinho *vizinhoDeP)
+{
 }
 
 int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
 {
     int custoMinimo = 0;
-    Vizinho *p = *rede, minimoValor;
+    Vizinho *p, *vizinhoDeP, minimoValor;
+    p = *rede;
     p->custo = 0;
 
     for (int i = 1; i < tamanhoRede; i++)
@@ -116,24 +132,31 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
     for (int h = 0; h < tamanhoRede; h++)
         cout << (minHeap + h)->ip << ", " << (minHeap + h)->custo << endl;
 
-    while (tamanhoRede > 0){
+    while (tamanhoRede > 0)
+    {
         minimoValor = extraiMinimo(&minHeap, &tamanhoRede);
         custoMinimo += minimoValor.custo;
 
         for (int t = 0; t < tamanhoRede; t++)
             cout << (minHeap + t)->ip << ", " << (minHeap + t)->custo << endl;
 
-        // for (int j = 1; j < tamanhoRede; j++)
-        // {
-        //     if (comparaStr((p + j)->ip, minimoValor.ip) == 1)
-        //     {
-        //         for (int k = 0; k < tamanhoRede; k++)
-        //         {
-        //         }
-        //     }
-        // }
+        for (int j = 0; j < tamanhoRede; j++)
+        {
+            vizinhoDeP = (p + j)->prox;
+            while (vizinhoDeP != NULL)
+            {
+                for (int k = 0; k < tamanhoRede; k++)
+                {
+                    if (comparaStr(vizinhoDeP->ip, (p + k)->ip) == 1)
+                    {
+                        if ((estaNoHeap(minHeap, vizinhoDeP, tamanhoRede) == 1) && (vizinhoDeP->custo < (p + k)->custo))
+                            diminuiPiroridade(&minHeap, vizinhoDeP);
+                    }
+                }
+                vizinhoDeP = vizinhoDeP->prox;
+            }
+        }
     }
-
     return custoMinimo;
 }
 
