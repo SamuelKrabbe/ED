@@ -87,6 +87,7 @@ int filhoDir(int i)
 
 void sobe(Vizinho **minHeap, int i)
 {
+    cout << "entrou na funcao sobe..." << endl;
     Vizinho *aux, *p, *f;
     aux = *minHeap;
     p = aux + pai(i);
@@ -94,11 +95,13 @@ void sobe(Vizinho **minHeap, int i)
 
     while (p->custo > f->custo)
     {
+        cout << "entrou no while da funcao sobe..." << endl;
         troca(&p, &f);
         i = pai(i);
         p = aux + pai(i);
         f = aux + i;
     }
+    cout << "saiu do while da funcao sobe..." << endl;
 }
 
 void desce(Vizinho **minHeap, int tamanhoHeap, int i)
@@ -166,28 +169,44 @@ Vizinho extraiMinimo(Vizinho **minHeap, int *tamanhoRede)
 
 int estaNoHeap(Vizinho *minHeap, Vizinho *vizinhoDeP, int tamanhoRede)
 {
+    cout << "entrou na funcao estaNoHeap..." << endl;
     Vizinho *p, *q;
     p = minHeap;
     q = vizinhoDeP;
 
     for (int i = 0; i < tamanhoRede; i++)
+    {
+        cout << "entrou no for i da funcao estaNoHeap..." << endl;
         if (comparaStr((p + i)->ip, q->ip) == 1)
+        {
+            cout << "entrou no if da funcao estaNoHeap..." << endl;
             return 1;
+        }
+    }
+    cout << "saiu do for i da funcao estaNoHeap..." << endl;
     return 0;
 }
 
-void diminuiPiroridade(Vizinho **minHeap, Vizinho *vizinhoDeP, int tamanhoHeap)
+void diminuiPrioridade(Vizinho **minHeap, Vizinho *vizinhoDeP, int tamanhoHeap)
 {
+    cout << "entrou na funcao diminuiPrioridade..." << endl;
     int index;
     Vizinho *p;
     p = *minHeap;
 
     for (int i = 0; i < tamanhoHeap; i++)
+    {
+        cout << "entrou no for i da funcao diminuiPrioridade..." << endl;
         if (comparaStr((p + i)->ip, vizinhoDeP->ip) == 1)
+        {
+            cout << "entrou no if da funcao diminuiPrioridade..." << endl;
             index = i;
-
+        }
+    }
+    cout << "saiu do for i da funcao diminuiPrioridade..." << endl;
     (p + index)->custo = vizinhoDeP->custo;
     sobe(minHeap, index);
+    cout << "saiu da funcao sobe..." << endl;
 }
 
 int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
@@ -211,20 +230,25 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
         minimoValor = extraiMinimo(&minHeap, &tamanhoRede);
         custoMinimo += minimoValor.custo;
 
-        for (int t = 0; t < tamanhoRede; t++)
-            cout << (minHeap + t)->ip << ", " << (minHeap + t)->custo << endl;
-
         for (int j = 0; j < tamanhoRede; j++)
         {
+            cout << "entrou no for j..." << endl;
             vizinhoDeP = (p + j)->prox;
             while (vizinhoDeP != NULL)
             {
+                cout << "entrou no while..." << endl;
                 for (int k = 0; k < tamanhoRede; k++)
                 {
-                    if (comparaStr(vizinhoDeP->ip, (p + k)->ip) == 1)
+                    cout << "entrou no for k " << k + 1 << "x..." << endl;
+                    if (comparaStr(vizinhoDeP->ip, (minHeap + k)->ip) == 1)
                     {
-                        if ((estaNoHeap(minHeap, vizinhoDeP, tamanhoRede) == 1) && (vizinhoDeP->custo < (p + k)->custo))
-                            diminuiPiroridade(&minHeap, vizinhoDeP, tamanhoRede);
+                        cout << "entrou no if..." << endl;
+                        if (vizinhoDeP->custo < (p + k)->custo)
+                        {
+                            cout << "entrou no if depois de passar pelo estaNoHeap..." << endl;
+                            diminuiPrioridade(&minHeap, vizinhoDeP, tamanhoRede);
+                            cout << "saiu da funcao diminuiPrioridade..." << endl;
+                        }
                     }
                 }
                 vizinhoDeP = vizinhoDeP->prox;
