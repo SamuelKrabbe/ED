@@ -1,3 +1,11 @@
+/**************************************************
+ *
+ * Samuel de Oliveira Krabbe e Leonardo de Moraes Perin
+ * Trabalho 1
+ * Professor(a): Fabio Henrique Viduani Martinez
+ *
+ */
+
 #include <iostream>
 #define MAX 1000000000
 
