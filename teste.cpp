@@ -116,10 +116,12 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
     for (int h = 0; h < tamanhoRede; h++)
         cout << (minHeap + h)->ip << ", " << (minHeap + h)->custo << endl;
 
-    while (minHeap != NULL)
-    {
+    while (tamanhoRede > 0){
         minimoValor = extraiMinimo(&minHeap, &tamanhoRede);
         custoMinimo += minimoValor.custo;
+
+        for (int t = 0; t < tamanhoRede; t++)
+            cout << (minHeap + t)->ip << ", " << (minHeap + t)->custo << endl;
 
         // for (int j = 1; j < tamanhoRede; j++)
         // {
@@ -131,9 +133,6 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
         //     }
         // }
     }
-
-    for (int t = 0; t < tamanhoRede; t++)
-        cout << (minHeap + t)->ip << ", " << (minHeap + t)->custo << endl;
 
     return custoMinimo;
 }
