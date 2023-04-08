@@ -7,7 +7,7 @@
  */
 
 #include <iostream>
-#define MAX 1000000000
+#define MAX 10000
 
 using namespace std;
 
@@ -167,25 +167,25 @@ Vizinho extraiMinimo(Vizinho **minHeap, int *tamanhoRede)
     return minimo;
 }
 
-int estaNoHeap(Vizinho *minHeap, Vizinho *vizinhoDeP, int tamanhoRede)
-{
-    cout << "entrou na funcao estaNoHeap..." << endl;
-    Vizinho *p, *q;
-    p = minHeap;
-    q = vizinhoDeP;
+// int estaNoHeap(Vizinho *minHeap, Vizinho *vizinhoDeP, int tamanhoRede)
+// {
+//     cout << "entrou na funcao estaNoHeap..." << endl;
+//     Vizinho *p, *q;
+//     p = minHeap;
+//     q = vizinhoDeP;
 
-    for (int i = 0; i < tamanhoRede; i++)
-    {
-        cout << "entrou no for i da funcao estaNoHeap..." << endl;
-        if (comparaStr((p + i)->ip, q->ip) == 1)
-        {
-            cout << "entrou no if da funcao estaNoHeap..." << endl;
-            return 1;
-        }
-    }
-    cout << "saiu do for i da funcao estaNoHeap..." << endl;
-    return 0;
-}
+//     for (int i = 0; i < tamanhoRede; i++)
+//     {
+//         cout << "entrou no for i da funcao estaNoHeap..." << endl;
+//         if (comparaStr((p + i)->ip, q->ip) == 1)
+//         {
+//             cout << "entrou no if da funcao estaNoHeap..." << endl;
+//             return 1;
+//         }
+//     }
+//     cout << "saiu do for i da funcao estaNoHeap..." << endl;
+//     return 0;
+// }
 
 void diminuiPrioridade(Vizinho **minHeap, Vizinho *vizinhoDeP, int tamanhoHeap)
 {
@@ -240,17 +240,11 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
                 for (int k = 0; k < tamanhoRede; k++)
                 {
                     cout << "entrou no for k " << k + 1 << "x..." << endl;
-                    cout << (p + k)->prox->ip << endl;
-                    cout << (minHeap + k)->ip << endl;
-                    if (comparaStr(vizinhoDeP->ip, (minHeap + k)->ip) == 1)
+                    if ((comparaStr(vizinhoDeP->ip, (minHeap + k)->ip) == 1) && (vizinhoDeP->custo < (minHeap + k)->custo))
                     {
                         cout << "entrou no if..." << endl;
-                        if (vizinhoDeP->custo < (minHeap + k)->custo)
-                        {
-                            cout << "entrou no if depois de passar pelo estaNoHeap..." << endl;
-                            diminuiPrioridade(&minHeap, vizinhoDeP, tamanhoRede);
-                            cout << "saiu da funcao diminuiPrioridade..." << endl;
-                        }
+                        diminuiPrioridade(&minHeap, vizinhoDeP, tamanhoRede);
+                        cout << "saiu da funcao diminuiPrioridade..." << endl;
                     }
                 }
                 vizinhoDeP = vizinhoDeP->prox;
