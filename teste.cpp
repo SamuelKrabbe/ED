@@ -9,50 +9,46 @@ typedef struct vizinho{
     struct vizinho *prox;
 }Vizinho;
 
-typedef struct rede{
-    string ip;
-    int prioridade;
-    Vizinho *vizinho;
-}Rede;
+int comparaStr(string str1, string str2){
+    for (long unsigned int i = 0; i < str1.length() || i < str2.length(); i++){
+        if (str1[i] != str2[i])
+            return 0;
+    }
+    return 1;
+}
 
-void adicionaVizinho(Rede **rede, string conexao, int custo){
-    Rede *p = *rede;
-    Vizinho *q = p->vizinho;
+void adicionaVizinho(Vizinho **vizinho, string conexao, int custo){
+    Vizinho *p = *vizinho;
     
     Vizinho novoVizinho;
     novoVizinho.ip = conexao;
     novoVizinho.custo = custo;
     novoVizinho.prox = NULL;
-
-    if (q == NULL){
-        q = &novoVizinho;
-        cout << "\naqui foi if!\n";
-    }else{
-        while (q->prox != NULL)
-        {
-            cout << "\naqui foi loop function!\n";
-            q = q->prox;
-        }
+    
+    while (p->prox != NULL)
+    {
+        cout << "\naqui foi loop function!\n";
+        p = p->prox;
     }
-        
-    q->prox = &novoVizinho;
-    cout << "\naqui foi!\n";
+       
+    p->prox = &novoVizinho;
+    cout << "\naqui foi funcao!\n";
 }
 
 int main(){
     int quantIps, quantConexoes, custo;
     string ip, ipConexao, conexao;
-    Rede *aux = NULL;
+    Vizinho *aux = NULL;
 
     cin >> quantIps;
     
-    Rede *rede = new Rede[quantIps];
+    Vizinho *rede = new Vizinho[quantIps];
 
     for (int i = 0; i < quantIps; i++){
         cin >> ip;
-        (*(rede + i)).ip = ip;
-        (*(rede + i)).prioridade = MAX;
-        (*(rede + i)).vizinho = NULL;
+        (rede + i)->ip = ip;
+        (rede + i)->custo = MAX;
+        (rede + i)->prox = NULL;
     }
 
     cin >> quantConexoes;
@@ -60,13 +56,16 @@ int main(){
     for (int j = 0; j < quantConexoes; j++){
         cin >> ipConexao >> conexao >> custo;
 
-        for (int j = 0; j < quantIps; j++){
-            if ((rede + j)->ip == ipConexao){
-                aux = rede + j;
+        for (int k = 0; k < quantIps; k++){
+            if (comparaStr((rede + k)->ip, ipConexao) == 1)
+            {
+                aux = (rede + k);
                 cout << "\naqui foi if!\n";
                 adicionaVizinho(&aux, conexao, custo);
+                cout << "\naqui foi if!\n";
+                break;
             }
-            cout << "\naqui foi loop main!\n";
+            cout << "\naqui foi loop " << k << "x\n";
         }
     }
     cout << "\naqui foi!\n";
