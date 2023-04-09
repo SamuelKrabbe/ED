@@ -39,16 +39,18 @@ int comparaStr(string str1, string str2)
 void adicionaVizinho(Vizinho **vizinho, string conexao, int custo)
 {
     Vizinho *p = *vizinho;
-
-    Vizinho novoVizinho;
-    novoVizinho.ip = conexao;
-    novoVizinho.custo = custo;
-    novoVizinho.prox = NULL;
-
+    cout << "entrou na funcao adicionaViz..." << endl;
+    Vizinho *novoVizinho = new Vizinho;
+    cout << "criou o novoViz..." << endl;
+    novoVizinho->ip = conexao;
+    novoVizinho->custo = custo;
+    novoVizinho->prox = NULL;
+    
     while (p->prox != NULL)
         p = p->prox;
 
-    p->prox = &novoVizinho;
+    p->prox = novoVizinho;
+    cout << "adicionou o novoViz..." << endl;
 }
 
 void troca(Vizinho **i, Vizinho **j)
@@ -167,25 +169,25 @@ Vizinho extraiMinimo(Vizinho **minHeap, int *tamanhoRede)
     return minimo;
 }
 
-int estaNoHeap(Vizinho *minHeap, Vizinho *vizinhoDeP, int tamanhoRede)
-{
-    cout << "entrou na funcao estaNoHeap..." << endl;
-    Vizinho *p, *q;
-    p = minHeap;
-    q = vizinhoDeP;
+// int estaNoHeap(Vizinho *minHeap, Vizinho *vizinhoDeP, int tamanhoRede)
+// {
+//     cout << "entrou na funcao estaNoHeap..." << endl;
+//     Vizinho *p, *q;
+//     p = minHeap;
+//     q = vizinhoDeP;
 
-    for (int i = 0; i < tamanhoRede; i++)
-    {
-        cout << "entrou no for i da funcao estaNoHeap..." << endl;
-        if (comparaStr((p + i)->ip, q->ip) == 1)
-        {
-            cout << "entrou no if da funcao estaNoHeap..." << endl;
-            return 1;
-        }
-    }
-    cout << "saiu do for i da funcao estaNoHeap..." << endl;
-    return 0;
-}
+//     for (int i = 0; i < tamanhoRede; i++)
+//     {
+//         cout << "entrou no for i da funcao estaNoHeap..." << endl;
+//         if (comparaStr((p + i)->ip, q->ip) == 1)
+//         {
+//             cout << "entrou no if da funcao estaNoHeap..." << endl;
+//             return 1;
+//         }
+//     }
+//     cout << "saiu do for i da funcao estaNoHeap..." << endl;
+//     return 0;
+// }
 
 void diminuiPrioridade(Vizinho **minHeap, Vizinho *vizinhoDeP, int tamanhoHeap)
 {
@@ -197,10 +199,13 @@ void diminuiPrioridade(Vizinho **minHeap, Vizinho *vizinhoDeP, int tamanhoHeap)
     for (int i = 0; i < tamanhoHeap; i++)
     {
         cout << "entrou no for i da funcao diminuiPrioridade..." << endl;
+        cout << (p + i)->ip << endl;
+        cout << vizinhoDeP->ip << endl;
         if (comparaStr((p + i)->ip, vizinhoDeP->ip) == 1)
         {
             cout << "entrou no if da funcao diminuiPrioridade..." << endl;
             index = i;
+            break;
         }
     }
     cout << "saiu do for i da funcao diminuiPrioridade..." << endl;
@@ -221,10 +226,6 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
 
     Vizinho *minHeap = constroiMinHeap(rede, tamanhoRede);
 
-    // imprimindo o minHeap
-    for (int h = 0; h < tamanhoRede; h++)
-        cout << (minHeap + h)->ip << ", " << (minHeap + h)->custo << endl;
-
     while (tamanhoRede > 0)
     {
         minimoValor = extraiMinimo(&minHeap, &tamanhoRede);
@@ -240,14 +241,12 @@ int redeCustoMinimo(Vizinho **rede, int tamanhoRede)
                 for (int k = 0; k < tamanhoRede; k++)
                 {
                     cout << "entrou no for k " << k + 1 << "x..." << endl;
-                    cout << (p + k)->prox->ip << endl;
-                    cout << (minHeap + k)->ip << endl;
+
                     if (comparaStr(vizinhoDeP->ip, (minHeap + k)->ip) == 1)
                     {
                         cout << "entrou no if..." << endl;
                         if (vizinhoDeP->custo < (minHeap + k)->custo)
                         {
-                            cout << "entrou no if depois de passar pelo estaNoHeap..." << endl;
                             diminuiPrioridade(&minHeap, vizinhoDeP, tamanhoRede);
                             cout << "saiu da funcao diminuiPrioridade..." << endl;
                         }
@@ -293,6 +292,7 @@ int main()
             if (comparaStr((rede + k)->ip, ipConexao) == 1)
             {
                 aux = (rede + k);
+                cout << "entrou no if..." << endl;
                 adicionaVizinho(&aux, conexao, custo);
                 break;
             }
