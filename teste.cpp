@@ -43,7 +43,7 @@ void adicionaVizinho(Vizinho **vizinho, string conexao, int custo)
     novoVizinho->ip = conexao;
     novoVizinho->custo = custo;
     novoVizinho->prox = NULL;
-    
+
     while (p->prox != NULL)
         p = p->prox;
     p->prox = novoVizinho;
