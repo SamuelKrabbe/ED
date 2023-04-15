@@ -121,6 +121,7 @@ int Rede::redeCustoMinimo()
     Vizinho *conexaoVizinha, minimoValor;
 
     rede[0].custo = 0;
+
     MinHeap minHeap(rede, tamanhoRede);
 
     for (int j = 0; j < tamanhoRede; j++)
@@ -129,22 +130,32 @@ int Rede::redeCustoMinimo()
         {
             minimoValor = minHeap.extraiMinimo();
             custoMinimo += minimoValor.custo;
+            cout << custoMinimo << endl;
+            cout << endl;
         }
 
         conexaoVizinha = rede[j].prox;
+        cout << conexaoVizinha->ip << endl;
+        cout << endl;
 
         while (conexaoVizinha != NULL)
         {
             for (int k = 0; k < minHeap.tamanhoMinHeap; k++)
+            {
                 if (comparaStr(conexaoVizinha->ip, minHeap.minHeap[k].ip) == 1)
                 {
                     if (conexaoVizinha->custo < minHeap.minHeap[k].custo)
+                    {
                         minHeap.diminuiPrioridade(conexaoVizinha);
+                        minHeap.imprimeMinHeap();
+                    }
                     break;
                 }
+            }
             conexaoVizinha = conexaoVizinha->prox;
         }
     }
+
     return custoMinimo;
 }
 
@@ -311,6 +322,7 @@ int main()
     string ip, ipConexao, conexao;
 
     cin >> quantIps;
+
     Rede rede(quantIps);
 
     for (int i = 0; i < quantIps; i++)
@@ -324,8 +336,10 @@ int main()
     for (int j = 0; j < quantConexoes; j++)
     {
         cin >> ipConexao >> conexao >> custo;
+
         rede.adicionaVizinho(ipConexao, conexao, custo);
     }
+
     cout << rede.redeCustoMinimo() << endl;
     return 0;
 }
