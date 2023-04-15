@@ -46,6 +46,7 @@ class Rede
 
 public:
     Rede(int quantIps);
+    ~Rede();
     void setVerticeRede(string ip, int posicaoIp);
     void adicionaVizinho(string ip, string conexao, int custoConexao);
     int redeCustoMinimo();
@@ -62,6 +63,7 @@ class MinHeap
 
 public:
     MinHeap(Vizinho *rede, int tamanhoRede);
+    ~MinHeap();
     Vizinho extraiMinimo();
     void diminuiPrioridade(Vizinho *conexao);
     void imprimeMinHeap();
@@ -79,6 +81,35 @@ private:
 };
 
 //*************************************
+//*************** MAIN ****************
+//*************************************
+
+int main()
+{
+    int quantIps, quantConexoes, custo;
+    string ip, ipConexao, conexao;
+
+    cin >> quantIps;
+    Rede rede(quantIps);
+
+    for (int i = 0; i < quantIps; i++)
+    {
+        cin >> ip;
+        rede.setVerticeRede(ip, i);
+    }
+
+    cin >> quantConexoes;
+
+    for (int j = 0; j < quantConexoes; j++)
+    {
+        cin >> ipConexao >> conexao >> custo;
+        rede.adicionaVizinho(ipConexao, conexao, custo);
+    }
+    cout << rede.redeCustoMinimo() << endl;
+    return 0;
+}
+
+//*************************************
 //**** IMPLEMENTANDO A CLASSE REDE ****
 //*************************************
 
@@ -86,6 +117,11 @@ Rede::Rede(int quantIps)
 {
     tamanhoRede = quantIps;
     rede = new Vizinho[quantIps];
+}
+
+Rede::~Rede()
+{
+    delete[] rede;
 }
 
 void Rede::setVerticeRede(string ip, int posicaoIp)
@@ -188,6 +224,11 @@ MinHeap::MinHeap(Vizinho *rede, int tamanhoRede)
 
     for (int indice = tamanhoRede / 2; indice > 0; indice--)
         desce(indice);
+}
+
+MinHeap::~MinHeap()
+{
+    delete[] minHeap;
 }
 
 int MinHeap::pai(int i)
@@ -299,33 +340,4 @@ void MinHeap::imprimeMinHeap()
     }
     cout << "===========================================" << endl;
     cout << endl;
-}
-
-//*************************************
-//*************** MAIN ****************
-//*************************************
-
-int main()
-{
-    int quantIps, quantConexoes, custo;
-    string ip, ipConexao, conexao;
-
-    cin >> quantIps;
-    Rede rede(quantIps);
-
-    for (int i = 0; i < quantIps; i++)
-    {
-        cin >> ip;
-        rede.setVerticeRede(ip, i);
-    }
-
-    cin >> quantConexoes;
-
-    for (int j = 0; j < quantConexoes; j++)
-    {
-        cin >> ipConexao >> conexao >> custo;
-        rede.adicionaVizinho(ipConexao, conexao, custo);
-    }
-    cout << rede.redeCustoMinimo() << endl;
-    return 0;
 }
