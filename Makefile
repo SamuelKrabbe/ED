@@ -1,8 +1,7 @@
 #Makefile para o trabalho
 
-PROG = teste
+PROG = trab1
 ENTRA = entrada.txt
-SAI = saida.txt
 
 CPPFLAGS = -Wall -pedantic -std=c++11
 
@@ -15,5 +14,4 @@ default :
 	@echo ""
 	@echo "-----------------------------------"
 	@echo "Teste:"
-	./$(PROG) < $(ENTRA) > $(SAI)
-	cat $(SAI)
+	./$(PROG) < $(ENTRA)

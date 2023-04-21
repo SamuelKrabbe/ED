@@ -121,6 +121,24 @@ Rede::Rede(int quantIps)
 
 Rede::~Rede()
 {
+    Vizinho *aux1, *aux2;
+
+    for (int i = 0; i < tamanhoRede; i++)
+    {
+        aux1 = rede[i].prox;
+        if (aux1 != NULL)
+            aux2 = aux1->prox;
+        else
+            aux2 = NULL;
+
+        while (aux1 != NULL)
+        {
+            delete aux1;
+            aux1 = aux2;
+            if (aux1 != NULL)
+                aux2 = aux1->prox;
+        }
+    }
     delete[] rede;
 }
 
@@ -189,6 +207,8 @@ void Rede::imprimeRede()
     Vizinho *aux;
     for (int i = 0; i < tamanhoRede; i++)
     {
+        cout << "IP e CUSTO: " << endl;
+        cout << endl;
         cout << rede[i].ip << ", " << rede[i].custo << endl;
         cout << endl;
 
