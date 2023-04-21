@@ -17,7 +17,7 @@ using namespace std;
 
 typedef struct string
 {
-    char nome[20];
+    char nome[22];
 }String;
 
 typedef struct vizinho
