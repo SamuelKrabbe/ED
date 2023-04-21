@@ -12,25 +12,37 @@
 using namespace std;
 
 //*************************************
-//********** STRUCT VIZINHO ***********
+//****** STRUCT VIZINHO & STRING ******
 //*************************************
+
+typedef struct string
+{
+    char nome[20];
+}String;
 
 typedef struct vizinho
 {
-    string ip;
+    String ip;
     int custo;
     struct vizinho *prox;
 } Vizinho;
 
 //*************************************
-//********* FUNÇÃO comparaStr *********
+//**** FUNÇÕES ISOLADAS PARA STRING ***
 //*************************************
-
-int comparaStr(string str1, string str2)
+int getComprimentoStr(String str)
 {
-    for (long unsigned int i = 0; i < str1.length() || i < str2.length(); i++)
+    int i = 0;
+    while (str.nome[i] != '\0')
+        i++;
+    return i + 1;
+}
+
+int comparaStr(String str1, String str2)
+{
+    for (int i = 0; i < getComprimentoStr(str1) || i < getComprimentoStr(str2); i++)
     {
-        if (str1[i] != str2[i])
+        if (str1.nome[i] != str2.nome[i])
             return 0;
     }
     return 1;
@@ -47,8 +59,8 @@ class Rede
 public:
     Rede(int quantIps);
     ~Rede();
-    void setVerticeRede(string ip, int posicaoIp);
-    void adicionaVizinho(string ip, string conexao, int custoConexao);
+    void setVerticeRede(String ip, int posicaoIp);
+    void adicionaVizinho(String ip, String conexao, int custoConexao);
     int redeCustoMinimo();
     void imprimeRede();
 
@@ -87,14 +99,14 @@ private:
 int main()
 {
     int quantIps, quantConexoes, custo;
-    string ip, ipConexao, conexao;
+    String ip, ipConexao, conexao;
 
     cin >> quantIps;
     Rede rede(quantIps);
 
     for (int i = 0; i < quantIps; i++)
     {
-        cin >> ip;
+        cin >> ip.nome;
         rede.setVerticeRede(ip, i);
     }
 
@@ -102,7 +114,7 @@ int main()
 
     for (int j = 0; j < quantConexoes; j++)
     {
-        cin >> ipConexao >> conexao >> custo;
+        cin >> ipConexao.nome >> conexao.nome >> custo;
         rede.adicionaVizinho(ipConexao, conexao, custo);
     }
     cout << rede.redeCustoMinimo() << endl;
@@ -142,14 +154,14 @@ Rede::~Rede()
     delete[] rede;
 }
 
-void Rede::setVerticeRede(string ip, int posicaoIp)
+void Rede::setVerticeRede(String ip, int posicaoIp)
 {
     rede[posicaoIp].ip = ip;
     rede[posicaoIp].custo = MAX;
     rede[posicaoIp].prox = NULL;
 }
 
-void Rede::adicionaVizinho(string ip, string conexao, int custoConexao)
+void Rede::adicionaVizinho(String ip, String conexao, int custoConexao)
 {
     Vizinho *novoVizinho = new Vizinho, *aux;
     novoVizinho->ip = conexao;
@@ -209,7 +221,7 @@ void Rede::imprimeRede()
     {
         cout << "IP e CUSTO: " << endl;
         cout << endl;
-        cout << rede[i].ip << ", " << rede[i].custo << endl;
+        cout << rede[i].ip.nome << ", " << rede[i].custo << endl;
         cout << endl;
 
         cout << "CONEXÕES: " << endl;
@@ -217,7 +229,7 @@ void Rede::imprimeRede()
         aux = rede[i].prox;
         while (aux != NULL)
         {
-            cout << aux->ip << ", " << aux->custo << endl;
+            cout << aux->ip.nome << ", " << aux->custo << endl;
             aux = aux->prox;
         }
         cout << "===========================================" << endl;
@@ -356,7 +368,7 @@ void MinHeap::imprimeMinHeap()
 {
     for (int i = 0; i < tamanhoMinHeap; i++)
     {
-        cout << minHeap[i].ip << ", " << minHeap[i].custo << endl;
+        cout << minHeap[i].ip.nome << ", " << minHeap[i].custo << endl;
     }
     cout << "===========================================" << endl;
     cout << endl;
