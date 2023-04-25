@@ -18,7 +18,7 @@ using namespace std;
 typedef struct string
 {
     char nome[22];
-}String;
+} String;
 
 typedef struct vizinho
 {
@@ -214,28 +214,28 @@ int Rede::redeCustoMinimo()
     return custoMinimo;
 }
 
-void Rede::imprimeRede()
-{
-    Vizinho *aux;
-    for (int i = 0; i < tamanhoRede; i++)
-    {
-        cout << "IP e CUSTO: " << endl;
-        cout << endl;
-        cout << rede[i].ip.nome << ", " << rede[i].custo << endl;
-        cout << endl;
+// void Rede::imprimeRede()
+// {
+//     Vizinho *aux;
+//     for (int i = 0; i < tamanhoRede; i++)
+//     {
+//         cout << "IP e CUSTO: " << endl;
+//         cout << endl;
+//         cout << rede[i].ip.nome << ", " << rede[i].custo << endl;
+//         cout << endl;
 
-        cout << "CONEXÕES: " << endl;
-        cout << endl;
-        aux = rede[i].prox;
-        while (aux != NULL)
-        {
-            cout << aux->ip.nome << ", " << aux->custo << endl;
-            aux = aux->prox;
-        }
-        cout << "===========================================" << endl;
-        cout << endl;
-    }
-}
+//         cout << "CONEXÕES: " << endl;
+//         cout << endl;
+//         aux = rede[i].prox;
+//         while (aux != NULL)
+//         {
+//             cout << aux->ip.nome << ", " << aux->custo << endl;
+//             aux = aux->prox;
+//         }
+//         cout << "===========================================" << endl;
+//         cout << endl;
+//     }
+// }
 
 //*************************************
 //**** IMPLEMENTANDO A CLASSE HEAP ****
@@ -364,12 +364,12 @@ void MinHeap::diminuiPrioridade(Vizinho *conexao)
     sobe(indice);
 }
 
-void MinHeap::imprimeMinHeap()
-{
-    for (int i = 0; i < tamanhoMinHeap; i++)
-    {
-        cout << minHeap[i].ip.nome << ", " << minHeap[i].custo << endl;
-    }
-    cout << "===========================================" << endl;
-    cout << endl;
-}
+// void MinHeap::imprimeMinHeap()
+// {
+//     for (int i = 0; i < tamanhoMinHeap; i++)
+//     {
+//         cout << minHeap[i].ip.nome << ", " << minHeap[i].custo << endl;
+//     }
+//     cout << "===========================================" << endl;
+//     cout << endl;
+// }
