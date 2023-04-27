@@ -28,7 +28,7 @@ typedef struct vizinho
 } Vizinho;
 
 //*************************************
-//**** FUNÇÕES ISOLADAS PARA STRING ***
+//**** FUNÇÕES PARA O STRUCT STRING ***
 //*************************************
 int getComprimentoStr(String str)
 {
@@ -104,6 +104,7 @@ int main()
     cin >> quantIps;
     Rede rede(quantIps);
 
+    //Lendo cada IP e inicializando cada nó da rede com tal IP e outros valores padrão
     for (int i = 0; i < quantIps; i++)
     {
         cin >> ip.nome;
@@ -112,11 +113,13 @@ int main()
 
     cin >> quantConexoes;
 
+    //Lendo as conexões de cada IP e adicionando eles no nó da rede que contém tal IP
     for (int j = 0; j < quantConexoes; j++)
     {
         cin >> ipConexao.nome >> conexao.nome >> custo;
         rede.adicionaVizinho(ipConexao, conexao, custo);
     }
+    
     cout << rede.redeCustoMinimo() << endl;
     return 0;
 }
@@ -155,14 +158,16 @@ Rede::~Rede()
 }
 
 void Rede::setVerticeRede(String ip, int posicaoIp)
-{
+{   //Essa função define o que cada nó da rede tem no inicio do programa
+
     rede[posicaoIp].ip = ip;
     rede[posicaoIp].custo = MAX;
     rede[posicaoIp].prox = NULL;
 }
 
 void Rede::adicionaVizinho(String ip, String conexao, int custoConexao)
-{
+{   //Adiciona para cada IP da rede as suas possíveis conexões
+
     Vizinho *novoVizinho = new Vizinho, *aux;
     novoVizinho->ip = conexao;
     novoVizinho->custo = custoConexao;
@@ -214,6 +219,7 @@ int Rede::redeCustoMinimo()
     return custoMinimo;
 }
 
+// Deixei essa função imprimeRede aqui caso queira imprimir a rede...
 // void Rede::imprimeRede()
 // {
 //     Vizinho *aux;
@@ -364,6 +370,7 @@ void MinHeap::diminuiPrioridade(Vizinho *conexao)
     sobe(indice);
 }
 
+// Deixei essa função imprimeMinHeap aqui caso queira imprimir o minHeap...
 // void MinHeap::imprimeMinHeap()
 // {
 //     for (int i = 0; i < tamanhoMinHeap; i++)
