@@ -104,7 +104,6 @@ int main()
     cin >> quantIps;
     Rede rede(quantIps);
 
-    //Lendo cada IP e inicializando cada nó da rede com tal IP e outros valores padrão
     for (int i = 0; i < quantIps; i++)
     {
         cin >> ip.nome;
@@ -113,13 +112,12 @@ int main()
 
     cin >> quantConexoes;
 
-    //Lendo as conexões de cada IP e adicionando eles no nó da rede que contém tal IP
     for (int j = 0; j < quantConexoes; j++)
     {
         cin >> ipConexao.nome >> conexao.nome >> custo;
         rede.adicionaVizinho(ipConexao, conexao, custo);
     }
-    
+
     cout << rede.redeCustoMinimo() << endl;
     return 0;
 }
