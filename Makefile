@@ -1,6 +1,6 @@
 #Makefile para o trabalho
 
-PROG = trab1
+PROG = redeMinima
 ENTRA = entrada.txt
 
 CPPFLAGS = -Wall -pedantic -std=c++11
