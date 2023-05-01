@@ -54,7 +54,6 @@ int comparaStr(String str1, String str2)
 
 class Rede
 {
-    friend class MinHeap;
 
 public:
     Rede(int quantIps);
@@ -156,7 +155,7 @@ Rede::~Rede()
 }
 
 void Rede::setVerticeRede(String ip, int posicaoIp)
-{   //Essa função define o que cada nó da rede tem no inicio do programa
+{ // Essa função define o que cada nó da rede tem no inicio do programa
 
     rede[posicaoIp].ip = ip;
     rede[posicaoIp].custo = MAX;
@@ -164,7 +163,7 @@ void Rede::setVerticeRede(String ip, int posicaoIp)
 }
 
 void Rede::adicionaVizinho(String ip, String conexao, int custoConexao)
-{   //Adiciona para cada IP da rede as suas possíveis conexões
+{ // Adiciona para cada IP da rede as suas possíveis conexões
 
     Vizinho *novoVizinho = new Vizinho, *aux;
     novoVizinho->ip = conexao;
