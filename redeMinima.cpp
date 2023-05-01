@@ -61,7 +61,7 @@ public:
     void setVerticeRede(String ip, int posicaoIp);
     void adicionaVizinho(String ip, String conexao, int custoConexao);
     int redeCustoMinimo();
-    // void imprimeRede();
+    // void imprimeRede(); -> Pode ser útil, deixei aqui...
 
 private:
     int tamanhoRede;
@@ -77,7 +77,7 @@ public:
     ~MinHeap();
     Vizinho extraiMinimo();
     void diminuiPrioridade(Vizinho *conexao);
-    // void imprimeMinHeap();
+    // void imprimeMinHeap(); -> Pode ser útil, deixei aqui...
 
 private:
     Vizinho *minHeap;
