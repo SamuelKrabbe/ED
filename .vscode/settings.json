@@ -3,6 +3,7 @@
 		"xstring": "cpp",
 		"iostream": "cpp",
 		"new": "cpp",
-		"string_view": "cpp"
+		"string_view": "cpp",
+		"ostream": "cpp"
 	}
 }
