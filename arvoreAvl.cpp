@@ -95,8 +95,6 @@ int main(void)
     T.insere(x);
   T.escreve();
   
-  return 0; // TODO: implemente a remoção e remova esta linha
-
   printf("\n##TESTE DE REMOÇÃO##\n\n");
   printf("T:\n");
   T.escreve();
@@ -201,7 +199,7 @@ void AVL::escreve(const string& prefixo, No *x) {
   bool ehDireito = x->pai and x->pai->dir == x;
   bool temIrmaoEsq = x->pai and x->pai->esq;
   
-  printf(prefixo.c_str());
+  printf("%s", prefixo.c_str());
   printf(ehDireito and temIrmaoEsq ? "├──" : "└──" );
 
   if (x->pai == NULL) // raiz
@@ -353,57 +351,43 @@ bool AVL::remove(int chave) {
 }
 
 void AVL::remove(No *z) {
-  // TODO: remoção da árvore binária de busca, falta implementar toda a parte de balanceamento
 
-  // Precisamos salvar a posição na qual a árvore foi efetivamente
-  // modificada e onde devemos começar a atualização de
-  // alturas/fatores de balanceamento..
   No *p = NULL;
   
   if (z->esq == NULL) { // 1o caso
-    //p = ???; // p pode receber nulo?
     transplante(z, z->dir);
   }
   else {
     if (z->dir == NULL) { // 2o caso
-      //p = ???; // p pode receber nulo?
       transplante(z, z->esq);
     }
     else { // 3o caso
       No *y = minimo(z->dir);
       
       if (y->pai != z) { // (b)
-        //p = ???; // p pode receber nulo?
         transplante(y, y->dir); 
         y->dir = z->dir;
         y->dir->pai = y;
+        p = y->dir;
+        ajusta_balanceamento(p);
       }
       
       transplante(z, y); // (a)
       y->esq = z->esq;
       y->esq->pai = y;
+      y->pai = z->pai;
 
-      if (p == NULL) // se fomos direto pro caso 3(a) sem entrar no caso 3(b)
-        ;//p = ???; // p pode receber nulo?
+      p = y;
+      while (p != NULL){
+        ajusta_balanceamento(p);
+        p = p->pai;
+      }
     }
   }
 
-  // Implementar aqui a atualização das alturas/fatores de
-  // balanceamento e rotações. É muito semelhante à atualização das
-  // alturas/fatores de balanceamento da inserção. Consulte nas notas
-  // de aula as diferenças. Além disso:
-  //
   // * Quando a árvore necessitar alguma rotação do caso 1 (z->bal() == 2)
   //   - Se z->esq->bal() for zero, escolher o caso 1.1 para rotação
   // * Siga a mesma lógica para o caso 2 (z->bal() == -2) e o caso 2.1
-  //
-  // Observe que os 2 requisitos acima já estão implementados em ajusta_balanceamento()
-
-  // 1º: p pode estar valendo nulo?
-
-  // 2º: fazer o laço, mas diferente da inserção, não podemos subir
-  // imediatamente para o pai de p, pois p é o próprio nó que precisa
-  // atualização.
 }
 
 void AVL::limpa() {
