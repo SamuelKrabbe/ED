@@ -9,8 +9,6 @@
 #include <iostream>
 #define MAX 1000000000
 
-using namespace std;
-
 //*************************************
 //****** STRUCT VIZINHO & STRING ******
 //*************************************
@@ -100,24 +98,24 @@ int main()
     int quantIps, quantConexoes, custo;
     String ip, ipConexao, conexao;
 
-    cin >> quantIps;
+    scanf("%d", &quantIps);
     Rede rede(quantIps);
 
     for (int i = 0; i < quantIps; i++)
     {
-        cin >> ip.nome;
+        scanf("%s", ip.nome);
         rede.setVerticeRede(ip, i);
     }
 
-    cin >> quantConexoes;
+    scanf("%d", &quantConexoes);
 
     for (int j = 0; j < quantConexoes; j++)
     {
-        cin >> ipConexao.nome >> conexao.nome >> custo;
+        scanf("%s %s %d", ipConexao.nome, conexao.nome, &custo);
         rede.adicionaVizinho(ipConexao, conexao, custo);
     }
 
-    cout << rede.redeCustoMinimo() << endl;
+    printf("%d\n", rede.redeCustoMinimo());
     return 0;
 }
 
@@ -128,27 +126,19 @@ int main()
 Rede::Rede(int quantIps)
 {
     tamanhoRede = quantIps;
-    rede = new Vizinho[quantIps];
+    rede = new Vizinho[quantIps]();
 }
 
 Rede::~Rede()
 {
-    Vizinho *aux1, *aux2;
-
     for (int i = 0; i < tamanhoRede; i++)
     {
-        aux1 = rede[i].prox;
-        if (aux1 != NULL)
-            aux2 = aux1->prox;
-        else
-            aux2 = NULL;
-
-        while (aux1 != NULL)
+        Vizinho *aux = rede[i].prox;
+        while (aux != nullptr)
         {
-            delete aux1;
-            aux1 = aux2;
-            if (aux1 != NULL)
-                aux2 = aux1->prox;
+            Vizinho *temp = aux;
+            aux = aux->prox;
+            delete temp;
         }
     }
     delete[] rede;
