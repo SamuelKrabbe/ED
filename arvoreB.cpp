@@ -103,7 +103,7 @@ int main(void)
     for (const auto &x : v)
     {
         printf("\nInserindo %d...\n", x);
-        T.insere(x); // TODO: é necessário implementar a função insere_nao_cheio
+        T.insere(x);
         printf("T:\n");
         T.escreve();
     }
@@ -343,14 +343,14 @@ pair<No *, int> BArvore::busca(No *x, int k)
 {
     int i = 0;
 
-    while(i < x->n && k > x->chave[i])
+    while (i < x->n && k > x->chave[i])
         i++;
-    if(i < x->n && k == x->chave[i])
+    if (i < x->n && k == x->chave[i])
         return pair<No *, int>(x, i);
-    else if(x->eh_folha())
-            return pair<No *, int>(NULL, -1);
-        else
-            busca(x->filho[i], k);
+    else if (x->eh_folha())
+        return pair<No *, int>(NULL, -1);
+    else
+        busca(x->filho[i], k);
 }
 
 pair<No *, int> BArvore::minimo()
@@ -427,7 +427,28 @@ void BArvore::insere(int k)
 
 void BArvore::insere_nao_cheio(No *x, int k)
 {
-    // TODO: implementar o algoritmo de inserção em nó não cheio.
+    int i = (x->n) - 1;
+
+    if (x->eh_folha())
+    {
+        while (i >= 0 && k < x->chave[i])
+        {
+            x->chave[i + 1] = x->chave[i];
+            i--;
+        }
+        x->chave[i + 1] = k;
+    }
+    else
+    {
+        while (i >= 0 && k < x->chave[i])
+            i--;
+        i++;
+        if(x->filho[i]->n == (2 * t) - 1)
+            divide_filho(x, i);
+            if(k > x->chave[i])
+                i++;
+        insere_nao_cheio(x->filho[i], k);
+    }
 }
 
 void BArvore::agrupa_filho(No *x, int i)
