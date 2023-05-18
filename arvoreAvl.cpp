@@ -86,7 +86,7 @@ private:
 
 int main(void)
 {
-  AVL T; // construtor AVL()
+  AVL T;
   int v[] = {10, 25, 0, 16, 20, 9, 15, 6, 14, 7, 18, 12, 22, 19, 3, 13, 28};
 
   printf("##TESTE DE INSERÇÃO##\n\n");
@@ -179,7 +179,6 @@ void AVL::escreve_ordenado() {
 }
 
 void AVL::escreve_ordenado(No *x) {
-  // percurso em-ordem
   if (x == NULL)
     return;
   
@@ -351,43 +350,60 @@ bool AVL::remove(int chave) {
 }
 
 void AVL::remove(No *z) {
-
+  // Precisamos salvar a posição na qual a árvore foi efetivamente
+  // modificada e onde devemos começar a atualização de
+  // alturas/fatores de balanceamento.
   No *p = NULL;
   
   if (z->esq == NULL) { // 1o caso
+    p = z->pai; // a altura de z->dir (que substituirá z) não será alterada, e z->dir pode ser nulo
     transplante(z, z->dir);
   }
   else {
     if (z->dir == NULL) { // 2o caso
+      p = z->pai; // a altura de z->esq (que substituirá z) não será alterada
       transplante(z, z->esq);
     }
     else { // 3o caso
       No *y = minimo(z->dir);
       
       if (y->pai != z) { // (b)
+        p = y->pai; // a altura de y->dir (que substituirá y) não será alterada, e y->dir pode ser nulo
         transplante(y, y->dir); 
         y->dir = z->dir;
         y->dir->pai = y;
-        p = y->dir;
-        ajusta_balanceamento(p);
       }
       
       transplante(z, y); // (a)
       y->esq = z->esq;
       y->esq->pai = y;
-      y->pai = z->pai;
 
-      p = y;
-      while (p != NULL){
-        ajusta_balanceamento(p);
-        p = p->pai;
-      }
+      // Se não entramos no caso 3(b), a atualização de "p" é um
+      // pouco diferente dos outros casos. Se entramos diretamente no
+      // caso 3(a), o nó "z" removido tem filhos esquerdo E direito,
+      // mas o sucessor "y" que o substituirá é seu filho direito. A
+      // altura de "y" *PODE* ser modificada, já que "y" terá um filho
+      // esquerdo que não tinha antes (o antigo filho esquerdo de "z").
+      if (p == NULL) // se fomos direto pro caso 3(a) sem entrar no caso 3(b)
+        p = y;
     }
   }
 
-  // * Quando a árvore necessitar alguma rotação do caso 1 (z->bal() == 2)
-  //   - Se z->esq->bal() for zero, escolher o caso 1.1 para rotação
-  // * Siga a mesma lógica para o caso 2 (z->bal() == -2) e o caso 2.1
+  // Atualização das alturas/fatores de balanceamento
+
+  // Se p é nulo, significa que a raiz foi removida e substituída por
+  // seu único filho, então nada muda.
+  if (p == NULL)
+    return;
+  
+  // Não podemos subir imediatamente para o pai de p (como na
+  // inserção), pois p é o próprio nó que precisa atualização.
+  p = ajusta_balanceamento(p);
+ 
+  while (!p->eh_raiz() and p->bal() != 1 and p->bal() != -1) { 
+    p = p->pai;
+    p = ajusta_balanceamento(p);
+  }
 }
 
 void AVL::limpa() {
