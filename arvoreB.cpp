@@ -213,8 +213,7 @@ public:
 //*** IMPLEMENTAÇÕES DA CLASSE No ***
 //***********************************
 
-No::No(int t) : n(0),
-                folha(true)
+No::No(int t) : n(0), folha(true)
 {
     // não armazenamos t, se necessário em alguma função deverá ser passado como parâmetro
     chave = new int[2 * t - 1];
@@ -342,15 +341,18 @@ pair<No *, int> BArvore::busca(int k)
 pair<No *, int> BArvore::busca(No *x, int k)
 {
     int i = 0;
+    int n = x->n;
 
-    while (i < x->n && k > x->chave[i])
+    while (i < n && k > x->chave[i])
         i++;
-    if (i < x->n && k == x->chave[i])
+    if (i < n && k == x->chave[i])
         return pair<No *, int>(x, i);
-    else if (x->eh_folha())
-        return pair<No *, int>(NULL, -1);
-    else
-        busca(x->filho[i], k);
+    else {
+        if (x->eh_folha())
+            return pair<No *, int>(NULL, -1);
+        else
+            return busca(x->filho[i], k);
+    }
 }
 
 pair<No *, int> BArvore::minimo()
@@ -360,11 +362,11 @@ pair<No *, int> BArvore::minimo()
 
 pair<No *, int> BArvore::minimo(No *x)
 {
-    // TODO: implementar o algoritmo para encontrar o mínimo na
-    // subárvore com raiz em x. Não é necessária uma função recursiva.
-    // A função deve devolver um pair<No *, int>(nó, posição) com o nó
-    // onde está o mínimo (será uma folha) e a posição da chave mínima
-    // neste nó.
+    No *minimo = x->filho[0];
+
+    while (!(minimo->eh_folha()))
+        minimo = minimo->filho[0];
+    return pair<No *, int>(minimo, minimo->chave[0]);
 }
 
 pair<No *, int> BArvore::maximo()
@@ -372,13 +374,13 @@ pair<No *, int> BArvore::maximo()
     return (raiz->n > 0) ? maximo(raiz) : pair<No *, int>(NULL, -1);
 }
 
-pair<No *, int> BArvore::maximo(No *x)
-{
-    // TODO: implementar o algoritmo para encontrar o máximo na
-    // subárvore com raiz em x. Não é necessária uma função recursiva.
-    // A função deve devolver um pair<No *, int>(nó, posição) com o nó
-    // onde está o máximo (será uma folha) e a posição da chave máxima
-    // neste nó.
+pair<No *, int> BArvore::maximo(No *x){
+    int n = x->n;
+    No *maximo = x->filho[n - 1];
+
+    while (!(maximo->eh_folha()))
+        maximo = maximo->filho[n - 1];
+    return pair<No *, int>(maximo, maximo->chave[n - 1]);
 }
 
 pair<No *, int> BArvore::sucessor(No *x, int i)
