@@ -110,7 +110,6 @@ int main(void)
     printf("\n\nElementos ordenados: ");
     T.escreve_ordenado();
 
-    return 0; // TODO: remova após implementar a busca, mínimo e máximo
 
     pair<No *, int> min = T.minimo();
     pair<No *, int> max = T.maximo();
@@ -362,11 +361,13 @@ pair<No *, int> BArvore::minimo()
 
 pair<No *, int> BArvore::minimo(No *x)
 {
-    No *minimo = x->filho[0];
+    No *minimo = x;
+    int minChave;
 
     while (!(minimo->eh_folha()))
         minimo = minimo->filho[0];
-    return pair<No *, int>(minimo, minimo->chave[0]);
+    minChave = minimo->chave[0];
+    return pair<No *, int>(minimo, minChave);
 }
 
 pair<No *, int> BArvore::maximo()
@@ -375,12 +376,17 @@ pair<No *, int> BArvore::maximo()
 }
 
 pair<No *, int> BArvore::maximo(No *x){
-    int n = x->n;
-    No *maximo = x->filho[n - 1];
+    No *maximo = x;
+    int n = maximo->n;
+    int maxChave;
 
     while (!(maximo->eh_folha()))
-        maximo = maximo->filho[n - 1];
-    return pair<No *, int>(maximo, maximo->chave[n - 1]);
+    {
+        maximo = maximo->filho[n];
+        n = maximo->n;
+    }
+    maxChave = maximo->chave[n - 1];
+    return pair<No *, int>(maximo, maxChave);
 }
 
 pair<No *, int> BArvore::sucessor(No *x, int i)
