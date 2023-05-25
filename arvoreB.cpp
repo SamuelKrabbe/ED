@@ -429,26 +429,25 @@ void BArvore::insere(int k)
 
 void BArvore::insere_nao_cheio(No *x, int k)
 {
-    int i = (x->n) - 1;
+    int i = x->n;
 
     if (x->eh_folha())
     {
-        while (i >= 0 && k < x->chave[i])
-        {
+        while (i >= 0 && k < x->chave[--i])
             x->chave[i + 1] = x->chave[i];
-            i--;
-        }
         x->chave[i + 1] = k;
+        (x->n)++;
     }
     else
     {
-        while (i >= 0 && k < x->chave[i])
-            i--;
+        while (i >= 0 && k < x->chave[--i]){}
         i++;
         if(x->filho[i]->n == (2 * t) - 1)
+        {
             divide_filho(x, i);
-            if(k > x->chave[i])
+            if (k > x->chave[i])
                 i++;
+        }
         insere_nao_cheio(x->filho[i], k);
     }
 }
