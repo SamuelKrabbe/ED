@@ -11,8 +11,9 @@
 
 using namespace std;
 
-void geraEntradaAleatoria(int *entrada, int tamanhoEntrada)
+int *geraEntradaAleatoria(int tamanhoEntrada)
 {
+    int *entrada = new int[tamanhoEntrada];
     // Função para gerar um conjunto de dados de entrada aleatório com base nos parâmetros fornecidos
     random_device rd;
     mt19937 gen(rd());
@@ -20,6 +21,7 @@ void geraEntradaAleatoria(int *entrada, int tamanhoEntrada)
 
     for (int i = 0; i < tamanhoEntrada; ++i)
         entrada[i] = dis(gen); // Gera um número aleatório e o adiciona ao conjunto de entrada
+    return entrada;
 }
 
 //*************************************
@@ -48,7 +50,7 @@ int getComprimentoStr(String str)
 
 int comparaStr(String str1, String str2)
 {
-    /* Recebe duas Strings, as compara e retorna 1 se forem iguais, 
+    /* Recebe duas Strings, as compara e retorna 1 se forem iguais,
         caso sejam diferentes retorna 0
     */
     for (int i = 0; i < getComprimentoStr(str1) || i < getComprimentoStr(str2); i++)
@@ -66,7 +68,7 @@ int comparaStr(String str1, String str2)
 class NoABB
 {
     // Nó da árvore binária de busca
-    friend class ArvBinBusca;
+    friend class ABB;
 
 public:
     NoABB(const int chave);
@@ -79,22 +81,22 @@ private:
     NoABB *dir;
 };
 
-class ArvBinBusca
+class ABB
 {
 public:
-    ArvBinBusca();
-    ~ArvBinBusca();
+    ABB();
+    ~ABB();
 
     void escreve_ordenado(); // escreve em percurso em-ordem
-    void insere(int chave); // insere a chave na árvore binária de busca
-    void limpa(); // remove todos elementos da árvore
+    void insere(int chave);  // insere a chave na árvore binária de busca
+    void limpa();            // remove todos elementos da árvore
 
 private:
     NoABB *raiz;
 
     void escreve_ordenado(NoABB *x); // escreve em percurso em-ordem
-    void insere(NoABB *z); // insere a chave na árvore binária de busca
-    void limpa(NoABB *x); // dado um nó x, remove recursivamente elementos abaixo e deleta x
+    void insere(NoABB *z);           // insere a chave na árvore binária de busca
+    void limpa(NoABB *x);            // dado um nó x, remove recursivamente elementos abaixo e deleta x
 };
 
 class NoAVL
@@ -126,9 +128,9 @@ public:
     AVL();
     ~AVL();
 
-    void escreve_ordenado(); // escreve em percurso em-ordem
-    NoAVL *get_raiz();          // devolve a raiz
-    void insere(int chave); // insere uma chave
+    void escreve_ordenado();  // escreve em percurso em-ordem
+    NoAVL *get_raiz();        // devolve a raiz
+    void insere(int chave);   // insere uma chave
     void limpa();             // remove todos elementos da árvore
     void rotacao_dir();       // Rotação à direita: p e p->esq
     void rotacao_esq();       // Rotação à esquerda: p e p->dir
@@ -144,40 +146,85 @@ private:
     // ponteiro para o nó que ocupou a posição de p na árvore (caso uma
     // rotação tenha sido realizada)
     NoAVL *ajusta_balanceamento(NoAVL *p);
-    void transplante(NoAVL *u, NoAVL *v);    // transplante de v para u, não altera filhos
-    void insere(NoAVL *z);             // insere um nó z na árvore
-    void limpa(NoAVL *x); // dado um nó x, remove recursivamente todos elementos abaixo e deleta x
-    void rotacao_dir(NoAVL *p);       // Rotação à direita: p e p->esq
-    void rotacao_esq(NoAVL *p);       // Rotação à esquerda: p e p->dir
-    void rotacao_dupla_dir(NoAVL *p); // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
-    void rotacao_dupla_esq(NoAVL *p); // Rotação dupla à esquerda: p->dir e p->dir->esq à direita, então p e p->dir à esquerda
+    void transplante(NoAVL *u, NoAVL *v); // transplante de v para u, não altera filhos
+    void insere(NoAVL *z);                // insere um nó z na árvore
+    void limpa(NoAVL *x);                 // dado um nó x, remove recursivamente todos elementos abaixo e deleta x
+    void rotacao_dir(NoAVL *p);           // Rotação à direita: p e p->esq
+    void rotacao_esq(NoAVL *p);           // Rotação à esquerda: p e p->dir
+    void rotacao_dupla_dir(NoAVL *p);     // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
+    void rotacao_dupla_esq(NoAVL *p);     // Rotação dupla à esquerda: p->dir e p->dir->esq à direita, então p e p->dir à esquerda
+};
+
+class Heap
+{
+public:
+    Heap();
+    Heap(int n, int **vetorEntrada);
+    ~Heap();
+    void heapSort();
+
+private:
+    int *S;
+    int tamanhoDeS; // tamanho do vetor de entrada
+
+    int pai(int i);
+    int esquerdo(int i);
+    int direito(int i);
+    void troca(int i, int j);
+    void desce(int i);
+    void sobe(int i);
 };
 
 int main()
 {
-    int inc = 10;  // Valor inicial
-    int max = 100; // Valor final
-    int stp = 20;  // Intervalo entre dois tamanhos
+    int inc;      // Valor inicial
+    int max;      // Valor final
+    int stp;      // Intervalo entre dois tamanhos
+    int rpt;      // Quantidade de repetições
+    int *entrada; // Vetor de entrada
+    time_t start, end;
+    double timeTaken;
 
-    for (int tamanhoEntrada = inc; tamanhoEntrada <= max; tamanhoEntrada += stp)
+    cin >> inc >> max >> stp >> rpt;
+    cout << "n          ABB           AVl          Heapsort     " << endl;
+    cout << "---------------------------------------------------" << endl;
+
+    for (int n = inc; n <= max; n += stp)
     {
-        int *entrada = new int[tamanhoEntrada];
-        geraEntradaAleatoria(entrada, tamanhoEntrada);
+        double totalABB = 0.000000f;
+        double totalAVL = 0.000000f;
+        double totalHEAP = 0.000000f;
+        double mediaABB = 0.000000f;
+        double mediaAVL = 0.000000f;
+        double mediaHEAP = 0.000000f;
 
-        // Use o conjunto de entrada gerado para executar seus algoritmos
-
-        // Exemplo: Imprimir o conjunto de entrada gerado
-        cout << "Tamanho: " << tamanhoEntrada << endl;
-        for (int i = 0; i < tamanhoEntrada; ++i)
+        for (int i = 0; i < rpt; i++)
         {
-            cout << entrada[i] << " ";
+            entrada = geraEntradaAleatoria(n);
+
+            // ABB
+            ABB arvoreBinBusca;
+            for (const auto &x : entrada)
+                arvoreBinBusca.insere(x);
+            // AVL
+            AVL arvoreAVL;
+            for (const auto &y : entrada)
+                arvoreAVL.insere(y);
+            // HEAP
+            Heap maxHeap(n, &entrada);
+            time(&start);
+            maxHeap.heapSort();
+            time(&end);
+            timeTaken = double(end - start);
+            totalHEAP += timeTaken;
+
+            delete[] entrada; // Liberar a memória alocada para o vetor
         }
-        cout << endl
-             << endl;
-
-        delete[] entrada; // Liberar a memória alocada para o array
+        double mediaABB = totalABB / rpt;
+        double mediaAVL = totalAVL / rpt;
+        double mediaHEAP = totalHEAP / rpt;
+        cout << n << "     " << mediaABB << "     " << mediaAVL << "     " << mediaHEAP << endl;
     }
-
     return 0;
 }
 
@@ -186,9 +233,9 @@ int main()
 //***********************************
 
 NoABB::NoABB(const int chave) : chave(chave),
-                          pai(NULL),
-                          esq(NULL),
-                          dir(NULL)
+                                pai(NULL),
+                                esq(NULL),
+                                dir(NULL)
 {
 }
 
@@ -198,26 +245,26 @@ void NoABB::escreve(const char *sep)
 }
 
 //********************************************
-//*** IMPLEMENTAÇÕES DA CLASSE ARVBINBUSCA ***
+//*** IMPLEMENTAÇÃO DA CLASSE ABB ****
 //********************************************
 
-ArvBinBusca::ArvBinBusca()
+ABB::ABB()
 {
     raiz = NULL;
 }
 
-ArvBinBusca::~ArvBinBusca()
+ABB::~ABB()
 {
     limpa();
 }
 
-void ArvBinBusca::escreve_ordenado()
+void ABB::escreve_ordenado()
 {
     escreve_ordenado(raiz);
     putchar('\n');
 }
 
-void ArvBinBusca::escreve_ordenado(NoABB *x)
+void ABB::escreve_ordenado(NoABB *x)
 {
     if (x == NULL)
         return;
@@ -227,13 +274,13 @@ void ArvBinBusca::escreve_ordenado(NoABB *x)
     escreve_ordenado(x->dir);
 }
 
-void ArvBinBusca::insere(int chave)
+void ABB::insere(int chave)
 {
     NoABB *z = new NoABB(chave);
     insere(z);
 }
 
-void ArvBinBusca::insere(NoABB *z)
+void ABB::insere(NoABB *z)
 {
     NoABB *y = NULL;
     NoABB *x = raiz;
@@ -255,15 +302,15 @@ void ArvBinBusca::insere(NoABB *z)
         y->dir = z;
 }
 
-void ArvBinBusca::limpa()
+void ABB::limpa()
 {
     limpa(raiz);
     raiz = NULL;
 }
 
-void ArvBinBusca::limpa(NoABB *x)
+void ABB::limpa(NoABB *x)
 {
-    //limpa a árvore em pós-ordem
+    // limpa a árvore em pós-ordem
     if (x == NULL)
         return;
 
@@ -273,14 +320,14 @@ void ArvBinBusca::limpa(NoABB *x)
 }
 
 //***********************************
-//* IMPLEMENTAÇÕES DA CLASSE NoAVL **
+//** IMPLEMENTAÇÃO DA CLASSE NoAVL **
 //***********************************
 
 NoAVL::NoAVL(const int chave) : chave(chave),
-                          altura(0),
-                          pai(NULL),
-                          esq(NULL),
-                          dir(NULL)
+                                altura(0),
+                                pai(NULL),
+                                esq(NULL),
+                                dir(NULL)
 {
 }
 
@@ -320,7 +367,7 @@ void NoAVL::atualiza_altura()
 }
 
 //************************************
-//*** IMPLEMENTAÇÕES DA CLASSE AVL ***
+//*** IMPLEMENTAÇÃO DA CLASSE AVL ****
 //************************************
 
 AVL::AVL()
@@ -509,4 +556,91 @@ void AVL::rotacao_dupla_esq(NoAVL *p)
 {
     rotacao_dir(p->dir);
     rotacao_esq(p);
+}
+
+//************************************
+//*** IMPLEMENTAÇÃO DA CLASSE Heap ***
+//************************************
+
+Heap::Heap(int n, int **vetorEntrada)
+{
+    S = *vetorEntrada;
+    tamanhoDeS = n;
+    Heap();
+}
+
+Heap::Heap()
+{
+    for (int i = tamanhoDeS / 2 - 1; i >= 0; i--)
+        desce(i);
+}
+
+Heap::~Heap()
+{
+}
+
+void Heap::heapSort()
+{
+    for (int i = tamanhoDeS - 1; i > 0; i--)
+    {
+        troca(S[0], S[i]);
+        tamanhoDeS--;
+        desce(0);
+    }
+}
+
+int Heap::pai(int i)
+{
+    return (i - 1) / 2;
+}
+
+int Heap::esquerdo(int i)
+{
+    return 2 * (i + 1) - 1;
+}
+
+int Heap::direito(int i)
+{
+    return 2 * (i + 1);
+}
+
+void Heap::troca(int i, int j)
+{
+    int aux = S[i];
+    S[i] = S[j];
+    S[j] = aux;
+}
+
+void Heap::desce(int i)
+{
+    int e, d, maior;
+
+    if (i != (tamanhoDeS - 1))
+    {
+        e = esquerdo(i);
+        d = direito(i);
+
+        if (e < tamanhoDeS && S[e] > S[i])
+            maior = e;
+        else
+            maior = i;
+
+        if (d < tamanhoDeS && S[d] > S[maior])
+            maior = d;
+
+        if (maior != i)
+        {
+            troca(i, maior);
+            desce(maior);
+        }
+    }
+}
+
+void Heap::sobe(int i)
+{
+    while (S[pai(i)] < S[i])
+    {
+        troca(i, pai(i));
+        i = pai(i);
+    }
 }
