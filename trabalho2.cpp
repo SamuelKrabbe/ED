@@ -26,7 +26,7 @@ int *geraEntradaAleatoria(int tamanhoEntrada)
 }
 
 //*************************************
-//*********** STRUCT String ***********
+//************** STRUCTs **************
 //*************************************
 
 typedef struct string
@@ -37,8 +37,21 @@ typedef struct string
     char nome[22];
 } String;
 
+typedef struct paraImprimir
+{
+    int n; // Tamanho do vetor de entrada
+    /*
+      Média do tempo de execução de cara algoritmo
+      de ordenação de cada árvore baseado na váriável
+      rpt definida na entrada
+    */
+    double mediaABB = 0.000000f;
+    double mediaAVL = 0.000000f;
+    double mediaHEAP = 0.000000f;
+} ImprimeInfo;
+
 //*************************************
-//**** FUNÇÕES PARA O STRUCT String ***
+//**** FUNÇÕES PARA OS STRUCTs ***
 //*************************************
 int getComprimentoStr(String str)
 {
@@ -60,6 +73,16 @@ int comparaStr(String str1, String str2)
             return 0;
     }
     return 1;
+}
+
+void imprimeVetorInfo(ImprimeInfo *info, int tamanhoVetorInfo)
+{
+    printf("\n");
+    printf("n          ABB           AVl          Heapsort     \n");
+    printf("---------------------------------------------------\n");
+    for (int i = 0; i < tamanhoVetorInfo; i++) {
+        printf("%d     %f     %f     %f\n", info[i].n, info[i].mediaABB, info[i].mediaAVL, info[i].mediaHEAP);
+    }
 }
 
 //*************************************
@@ -129,9 +152,9 @@ public:
     AVL();
     ~AVL();
 
-    void escreve_ordenado();  // escreve em percurso em-ordem
-    NoAVL *get_raiz();        // devolve a raiz
-    void insere(int chave);   // insere uma chave
+    void escreve_ordenado(); // escreve em percurso em-ordem
+    NoAVL *get_raiz();       // devolve a raiz
+    void insere(int chave);  // insere uma chave
     // void limpa();             // remove todos elementos da árvore
     void rotacao_dir();       // Rotação à direita: p e p->esq
     void rotacao_esq();       // Rotação à esquerda: p e p->dir
@@ -150,10 +173,10 @@ private:
     void transplante(NoAVL *u, NoAVL *v); // transplante de v para u, não altera filhos
     void insere(NoAVL *z);                // insere um nó z na árvore
     // void limpa(NoAVL *x);                 // dado um nó x, remove recursivamente todos elementos abaixo e deleta x
-    void rotacao_dir(NoAVL *p);           // Rotação à direita: p e p->esq
-    void rotacao_esq(NoAVL *p);           // Rotação à esquerda: p e p->dir
-    void rotacao_dupla_dir(NoAVL *p);     // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
-    void rotacao_dupla_esq(NoAVL *p);     // Rotação dupla à esquerda: p->dir e p->dir->esq à direita, então p e p->dir à esquerda
+    void rotacao_dir(NoAVL *p);       // Rotação à direita: p e p->esq
+    void rotacao_esq(NoAVL *p);       // Rotação à esquerda: p e p->dir
+    void rotacao_dupla_dir(NoAVL *p); // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
+    void rotacao_dupla_esq(NoAVL *p); // Rotação dupla à esquerda: p->dir e p->dir->esq à direita, então p e p->dir à esquerda
 };
 
 class Heap
@@ -176,6 +199,10 @@ private:
 
 int main()
 {
+    /* Para saber em qual indíce estamos no vetor
+    de informações para imprimir */
+    int ctrlVetorInfo = 0;
+
     int inc;      // Valor inicial
     int max;      // Valor final
     int stp;      // Intervalo entre dois tamanhos
@@ -192,8 +219,7 @@ int main()
 
     printf("Digite o inicio, máximo, step e repetição respectivamente: \n");
     scanf("%d %d %d %d", &inc, &max, &stp, &rpt);
-    printf("n          ABB           AVl          Heapsort     \n");
-    printf("---------------------------------------------------\n");
+    ImprimeInfo *info = new ImprimeInfo[max / stp];
 
     for (int n = inc; n <= max; n += stp)
     {
@@ -213,10 +239,10 @@ int main()
             ABB arvoreBinBusca; // Construindo a ABB
             for (int j = 0; j < n; j++)
                 arvoreBinBusca.insere(entrada[j]);
-            
+
             // Calculando o tempo da ordenação da ABB
             time(&start);
-            // ordena ABB
+            arvoreBinBusca.escreve_ordenado();
             time(&end);
             timeTaken = double(end - start);
             totalABB += timeTaken;
@@ -228,7 +254,7 @@ int main()
 
             // Calculando o tempo da ordenação da AVL
             time(&start);
-            // ordena AVl
+            arvoreAVL.escreve_ordenado();
             time(&end);
             timeTaken = double(end - start);
             totalAVL += timeTaken;
@@ -250,9 +276,13 @@ int main()
         mediaABB = totalABB / rpt;
         mediaAVL = totalAVL / rpt;
         mediaHEAP = totalHEAP / rpt;
-        // n << "     " << mediaABB << "     " << mediaAVL << "     " << mediaHEAP
-        printf("%d     %f     %f     %f\n", n, mediaABB, mediaAVL, mediaHEAP);
+        info[ctrlVetorInfo].n = n;
+        info[ctrlVetorInfo].mediaABB = mediaABB;
+        info[ctrlVetorInfo].mediaAVL = mediaAVL;
+        info[ctrlVetorInfo].mediaHEAP = mediaHEAP;
+        ctrlVetorInfo++;
     }
+    imprimeVetorInfo(info, ctrlVetorInfo);
     return 0;
 }
 
