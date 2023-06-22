@@ -45,9 +45,9 @@ typedef struct paraImprimir
       de ordenação de cada árvore baseado na váriável
       rpt definida na entrada
     */
-    double mediaABB = 0.000000f;
-    double mediaAVL = 0.000000f;
-    double mediaHEAP = 0.000000f;
+    double mediaABB = 0.00000000000f;
+    double mediaAVL = 0.00000000000f;
+    double mediaHEAP = 0.00000000000f;
 } ImprimeInfo;
 
 //*************************************
@@ -81,7 +81,7 @@ void imprimeVetorInfo(ImprimeInfo *info, int tamanhoVetorInfo)
     printf("n          ABB           AVl          Heapsort     \n");
     printf("---------------------------------------------------\n");
     for (int i = 0; i < tamanhoVetorInfo; i++) {
-        printf("%d     %f     %f     %f\n", info[i].n, info[i].mediaABB, info[i].mediaAVL, info[i].mediaHEAP);
+        printf("%d     %.10f     %.10f     %.10f\n", info[i].n, info[i].mediaABB, info[i].mediaAVL, info[i].mediaHEAP);
     }
 }
 
@@ -113,14 +113,14 @@ public:
 
     void escreve_ordenado(); // escreve em percurso em-ordem
     void insere(int chave);  // insere a chave na árvore binária de busca
-    // void limpa();            // remove todos elementos da árvore
+    void limpa();            // remove todos elementos da árvore
 
 private:
     NoABB *raiz;
 
     void escreve_ordenado(NoABB *x); // escreve em percurso em-ordem
     void insere(NoABB *z);           // insere a chave na árvore binária de busca
-    // void limpa(NoABB *x);            // dado um nó x, remove recursivamente elementos abaixo e deleta x
+    void limpa(NoABB *x);            // dado um nó x, remove recursivamente elementos abaixo e deleta x
 };
 
 class NoAVL
@@ -155,7 +155,7 @@ public:
     void escreve_ordenado(); // escreve em percurso em-ordem
     NoAVL *get_raiz();       // devolve a raiz
     void insere(int chave);  // insere uma chave
-    // void limpa();             // remove todos elementos da árvore
+    void limpa();             // remove todos elementos da árvore
     void rotacao_dir();       // Rotação à direita: p e p->esq
     void rotacao_esq();       // Rotação à esquerda: p e p->dir
     void rotacao_dupla_dir(); // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
@@ -172,7 +172,7 @@ private:
     NoAVL *ajusta_balanceamento(NoAVL *p);
     void transplante(NoAVL *u, NoAVL *v); // transplante de v para u, não altera filhos
     void insere(NoAVL *z);                // insere um nó z na árvore
-    // void limpa(NoAVL *x);                 // dado um nó x, remove recursivamente todos elementos abaixo e deleta x
+    void limpa(NoAVL *x);                 // dado um nó x, remove recursivamente todos elementos abaixo e deleta x
     void rotacao_dir(NoAVL *p);       // Rotação à direita: p e p->esq
     void rotacao_esq(NoAVL *p);       // Rotação à esquerda: p e p->dir
     void rotacao_dupla_dir(NoAVL *p); // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
@@ -223,12 +223,12 @@ int main()
 
     for (int n = inc; n <= max; n += stp)
     {
-        totalABB = 0.000000f;
-        totalAVL = 0.000000f;
-        totalHEAP = 0.000000f;
-        mediaABB = 0.000000f;
-        mediaAVL = 0.000000f;
-        mediaHEAP = 0.000000f;
+        totalABB = 0.00000000000f;
+        totalAVL = 0.00000000000f;
+        totalHEAP = 0.00000000000f;
+        mediaABB = 0.00000000000f;
+        mediaAVL = 0.00000000000f;
+        mediaHEAP = 0.00000000000f;
 
         for (int i = 0; i < rpt; i++)
         {
@@ -241,10 +241,14 @@ int main()
                 arvoreBinBusca.insere(entrada[j]);
 
             // Calculando o tempo da ordenação da ABB
+            printf("imprimindo ABB ordenado =========\n");
+            printf("\n");
             time(&start);
             arvoreBinBusca.escreve_ordenado();
             time(&end);
-            timeTaken = double(end - start);
+            printf("=================================\n");
+            printf("\n");
+            timeTaken = double(end - start) * 1000;
             totalABB += timeTaken;
 
             // AVL =============================================
@@ -253,20 +257,28 @@ int main()
                 arvoreAVL.insere(entrada[k]);
 
             // Calculando o tempo da ordenação da AVL
+            printf("imprimindo AVL ordenado =========\n");
+            printf("\n");
             time(&start);
             arvoreAVL.escreve_ordenado();
             time(&end);
-            timeTaken = double(end - start);
+            printf("=================================\n");
+            printf("\n");
+            timeTaken = double(end - start) * 1000;
             totalAVL += timeTaken;
 
             // HEAP =============================================
             Heap maxHeap(n, &entrada); // Construindo o maxHeap
 
             // Calculando o tempo da ordenação do maxHeap
+            printf("imprimindo HEAP ordenado =========\n");
+            printf("\n");
             time(&start);
             maxHeap.heapSort();
             time(&end);
-            timeTaken = double(end - start);
+            printf("=================================\n");
+            printf("\n");
+            timeTaken = double(end - start) * 1000;
             totalHEAP += timeTaken;
 
             // Limpando o vetor de entrada
@@ -360,22 +372,22 @@ void ABB::insere(NoABB *z)
         y->dir = z;
 }
 
-// void ABB::limpa()
-// {
-//     limpa(raiz);
-//     raiz = NULL;
-// }
+void ABB::limpa()
+{
+    limpa(raiz);
+    raiz = NULL;
+}
 
-// void ABB::limpa(NoABB *x)
-// {
-//     // limpa a árvore em pós-ordem
-//     if (x == NULL)
-//         return;
+void ABB::limpa(NoABB *x)
+{
+    // limpa a árvore em pós-ordem
+    if (x == NULL)
+        return;
 
-//     limpa(x->esq);
-//     limpa(x->dir);
-//     delete x;
-// }
+    limpa(x->esq);
+    limpa(x->dir);
+    delete x;
+}
 
 //***********************************
 //** IMPLEMENTAÇÃO DA CLASSE NoAVL **
@@ -532,21 +544,21 @@ void AVL::transplante(NoAVL *u, NoAVL *v)
         v->pai = u->pai;
 }
 
-// void AVL::limpa()
-// {
-//     limpa(raiz);
-//     raiz = NULL;
-// }
+void AVL::limpa()
+{
+    limpa(raiz);
+    raiz = NULL;
+}
 
-// void AVL::limpa(NoAVL *x)
-// {
-//     if (x == NULL)
-//         return;
+void AVL::limpa(NoAVL *x)
+{
+    if (x == NULL)
+        return;
 
-//     limpa(x->esq);
-//     limpa(x->dir);
-//     delete x;
-// }
+    limpa(x->esq);
+    limpa(x->dir);
+    delete x;
+}
 
 void AVL::rotacao_dir()
 {
