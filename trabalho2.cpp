@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <random>
-#include <bits/stdc++.h>
+#include <time.h>
 
 using namespace std;
 
@@ -45,9 +45,9 @@ typedef struct paraImprimir
       de ordenação de cada árvore baseado na váriável
       rpt definida na entrada
     */
-    double mediaABB = 0.00000000000f;
-    double mediaAVL = 0.00000000000f;
-    double mediaHEAP = 0.00000000000f;
+    double mediaABB;
+    double mediaAVL;
+    double mediaHEAP;
 } ImprimeInfo;
 
 //*************************************
@@ -80,8 +80,9 @@ void imprimeVetorInfo(ImprimeInfo *info, int tamanhoVetorInfo)
     printf("\n");
     printf("n          ABB           AVl          Heapsort     \n");
     printf("---------------------------------------------------\n");
-    for (int i = 0; i < tamanhoVetorInfo; i++) {
-        printf("%d     %.10f     %.10f     %.10f\n", info[i].n, info[i].mediaABB, info[i].mediaAVL, info[i].mediaHEAP);
+    for (int i = 0; i < tamanhoVetorInfo; i++)
+    {
+        printf("%d     %.6f     %.6f     %.6f\n", info[i].n, info[i].mediaABB, info[i].mediaAVL, info[i].mediaHEAP);
     }
 }
 
@@ -152,9 +153,9 @@ public:
     AVL();
     ~AVL();
 
-    void escreve_ordenado(); // escreve em percurso em-ordem
-    NoAVL *get_raiz();       // devolve a raiz
-    void insere(int chave);  // insere uma chave
+    void escreve_ordenado();  // escreve em percurso em-ordem
+    NoAVL *get_raiz();        // devolve a raiz
+    void insere(int chave);   // insere uma chave
     void limpa();             // remove todos elementos da árvore
     void rotacao_dir();       // Rotação à direita: p e p->esq
     void rotacao_esq();       // Rotação à esquerda: p e p->dir
@@ -173,10 +174,10 @@ private:
     void transplante(NoAVL *u, NoAVL *v); // transplante de v para u, não altera filhos
     void insere(NoAVL *z);                // insere um nó z na árvore
     void limpa(NoAVL *x);                 // dado um nó x, remove recursivamente todos elementos abaixo e deleta x
-    void rotacao_dir(NoAVL *p);       // Rotação à direita: p e p->esq
-    void rotacao_esq(NoAVL *p);       // Rotação à esquerda: p e p->dir
-    void rotacao_dupla_dir(NoAVL *p); // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
-    void rotacao_dupla_esq(NoAVL *p); // Rotação dupla à esquerda: p->dir e p->dir->esq à direita, então p e p->dir à esquerda
+    void rotacao_dir(NoAVL *p);           // Rotação à direita: p e p->esq
+    void rotacao_esq(NoAVL *p);           // Rotação à esquerda: p e p->dir
+    void rotacao_dupla_dir(NoAVL *p);     // Rotação dupla à direita: p->esq e p->esq->dir à esquerda, então p e p->esq à direita
+    void rotacao_dupla_esq(NoAVL *p);     // Rotação dupla à esquerda: p->dir e p->dir->esq à direita, então p e p->dir à esquerda
 };
 
 class Heap
@@ -185,6 +186,7 @@ public:
     Heap(int n, int **vetorEntrada);
     ~Heap();
     void heapSort();
+    void limpa();
 
 private:
     int *S;
@@ -208,7 +210,7 @@ int main()
     int stp;      // Intervalo entre dois tamanhos
     int rpt;      // Quantidade de repetições
     int *entrada; // Vetor de entrada
-    time_t start, end;
+    clock_t start, end;
     double timeTaken;
     double totalABB;
     double totalAVL;
@@ -223,67 +225,68 @@ int main()
 
     for (int n = inc; n <= max; n += stp)
     {
-        totalABB = 0.00000000000f;
-        totalAVL = 0.00000000000f;
-        totalHEAP = 0.00000000000f;
-        mediaABB = 0.00000000000f;
-        mediaAVL = 0.00000000000f;
-        mediaHEAP = 0.00000000000f;
+        totalABB = 0;
+        totalAVL = 0;
+        totalHEAP = 0;
+        mediaABB = 0;
+        mediaAVL = 0;
+        mediaHEAP = 0;
 
+        printf("-> Para n = %d\n", n);
+        printf("\n");
         for (int i = 0; i < rpt; i++)
         {
             // Aleatorizando o vetor de entrada
             entrada = geraEntradaAleatoria(n);
 
             // ABB =============================================
-            ABB arvoreBinBusca; // Construindo a ABB
+            ABB *arvoreBinBusca = new ABB(); // Construindo a ABB
             for (int j = 0; j < n; j++)
-                arvoreBinBusca.insere(entrada[j]);
+                arvoreBinBusca->insere(entrada[j]);
 
             // Calculando o tempo da ordenação da ABB
-            printf("imprimindo ABB ordenado =========\n");
+            printf("========== imprimindo ABB ordenado =========\n");
             printf("\n");
-            time(&start);
-            arvoreBinBusca.escreve_ordenado();
-            time(&end);
-            printf("=================================\n");
+            start = clock();
+            arvoreBinBusca->escreve_ordenado();
+            end = clock();
+            printf("============================================\n");
             printf("\n");
-            timeTaken = double(end - start) * 1000;
+            timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
             totalABB += timeTaken;
 
             // AVL =============================================
-            AVL arvoreAVL; // Construindo a arvore AVL
+            AVL *arvoreAVL = new AVL(); // Construindo a arvore AVL
             for (int k = 0; k < n; k++)
-                arvoreAVL.insere(entrada[k]);
+                arvoreAVL->insere(entrada[k]);
 
             // Calculando o tempo da ordenação da AVL
-            printf("imprimindo AVL ordenado =========\n");
+            printf("========== imprimindo AVL ordenado =========\n");
             printf("\n");
-            time(&start);
-            arvoreAVL.escreve_ordenado();
-            time(&end);
-            printf("=================================\n");
+            start = clock();
+            arvoreAVL->escreve_ordenado();
+            end = clock();
+            printf("============================================\n");
             printf("\n");
-            timeTaken = double(end - start) * 1000;
+            timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
             totalAVL += timeTaken;
 
             // HEAP =============================================
-            Heap maxHeap(n, &entrada); // Construindo o maxHeap
+            Heap *maxHeap = new Heap(n, &entrada); // Construindo o maxHeap
 
             // Calculando o tempo da ordenação do maxHeap
-            printf("imprimindo HEAP ordenado =========\n");
+            printf("========== imprimindo HEAP ordenado =========\n");
             printf("\n");
-            time(&start);
-            maxHeap.heapSort();
-            time(&end);
-            printf("=================================\n");
+            start = clock();
+            maxHeap->heapSort();
+            end = clock();
+            printf("ordenando HEAP, rpt = %d\n", i + 1);
+            printf("============================================\n");
             printf("\n");
-            timeTaken = double(end - start) * 1000;
+            timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
             totalHEAP += timeTaken;
-
-            // Limpando o vetor de entrada
-            delete[] entrada;
         }
+        
         // imprimindo as médias aritméticas
         mediaABB = totalABB / rpt;
         mediaAVL = totalAVL / rpt;
@@ -294,7 +297,10 @@ int main()
         info[ctrlVetorInfo].mediaHEAP = mediaHEAP;
         ctrlVetorInfo++;
     }
+
+    // imprimindo a saída conforme pedido no trabalho
     imprimeVetorInfo(info, ctrlVetorInfo);
+    delete[] info;
     return 0;
 }
 
@@ -642,6 +648,7 @@ Heap::Heap(int n, int **vetorEntrada)
 
 Heap::~Heap()
 {
+    limpa();
 }
 
 void Heap::heapSort()
@@ -652,6 +659,11 @@ void Heap::heapSort()
         tamanhoDeS--;
         desce(0);
     }
+}
+
+void Heap::limpa()
+{
+    delete[] S;
 }
 
 int Heap::pai(int i)
