@@ -7,20 +7,22 @@
  */
 
 #include <iostream>
-#include <random>
-#include <time.h>
+#include <random> // Biblioteca para gerar números aleatórios
+#include <time.h> // Biblioteca que me retorna o tempo atual
 
 using namespace std;
 
-int *geraEntradaAleatoria(int tamanhoEntrada)
+int *geraEntradaAleatoria(int n)
 {
-    int *entrada = new int[tamanhoEntrada];
-    // Função para gerar um conjunto de dados de entrada aleatório com base nos parâmetros fornecidos
+    /*
+        Gera um vetor de tamanho n, com elementos aleatórios
+    */
+    int *entrada = new int[n];
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<int> dis(0, 100); // Intervalo dos números aleatórios (0 a 100)
 
-    for (int i = 0; i < tamanhoEntrada; ++i)
+    for (int i = 0; i < n; ++i)
         entrada[i] = dis(gen); // Gera um número aleatório e o adiciona ao conjunto de entrada
     return entrada;
 }
@@ -40,12 +42,12 @@ typedef struct string
 
 typedef struct paraImprimir
 {
-    int n; // Tamanho do vetor de entrada
     /*
       Média do tempo de execução de cara algoritmo
       de ordenação de cada árvore baseado na váriável
       rpt definida na entrada
     */
+    int n; // Tamanho do vetor de entrada
     double mediaABB;
     double mediaAVL;
     double mediaHEAP;
@@ -221,7 +223,7 @@ class Heap
 public:
     Heap(int n, int **vetorEntrada);
     ~Heap();
-    void heapSort();
+    void heapSort(); // Algoritmo de ordenação do heap
     void limpa();
 
 private:
