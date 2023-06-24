@@ -31,7 +31,8 @@ int *geraEntradaAleatoria(int tamanhoEntrada)
 
 typedef struct string
 {
-    /* Como não podemos usar a biblioteca string
+    /*
+        Como não podemos usar a biblioteca string
         criamos nossa própria estrutura
     */
     char nome[22];
@@ -64,7 +65,8 @@ int getComprimentoStr(String str)
 
 int comparaStr(String str1, String str2)
 {
-    /* Recebe duas Strings, as compara e retorna 1 se forem iguais,
+    /*
+        Recebe duas Strings, as compara e retorna 1 se forem iguais,
         caso sejam diferentes retorna 0
     */
     for (int i = 0; i < getComprimentoStr(str1) || i < getComprimentoStr(str2); i++)
@@ -75,8 +77,42 @@ int comparaStr(String str1, String str2)
     return 1;
 }
 
+int stringParaInt(const char *str)
+{
+    /*
+        Converte uma string para inteiro usando uma lógica
+        de subtração dos valores na tabela ASCII
+    */
+    int resultado = 0;
+    int sinal = 1;
+    int i = 0;
+
+    // Lidar com sinal negativo, se presente
+    if (str[0] == '-')
+    {
+        sinal = -1;
+        i = 1;
+    }
+
+    // Converter os dígitos em inteiro
+    for (; str[i] != '\0'; ++i)
+    {
+        // Ignorar caracteres não numéricos
+        if (str[i] < '0' || str[i] > '9')
+            break;
+
+        resultado = resultado * 10 + (str[i] - '0');
+    }
+
+    return resultado * sinal;
+}
+
 void imprimeVetorInfo(ImprimeInfo *info, int tamanhoVetorInfo)
 {
+    /*
+        Imprime as informações do vetor info conforme o layout
+        pedido no trabalho
+    */
     printf("\n");
     printf("n          ABB           AVl          Heapsort     \n");
     printf("---------------------------------------------------\n");
@@ -107,7 +143,7 @@ private:
 };
 
 class ABB
-{
+{ // Classe da árvore binária de busca
 public:
     ABB();
     ~ABB();
@@ -148,7 +184,7 @@ private:
 };
 
 class AVL
-{
+{ // Classe da árvore AVL
 public:
     AVL();
     ~AVL();
@@ -181,7 +217,7 @@ private:
 };
 
 class Heap
-{
+{ // Classe do maxHeap
 public:
     Heap(int n, int **vetorEntrada);
     ~Heap();
@@ -189,7 +225,7 @@ public:
     void limpa();
 
 private:
-    int *S;
+    int *S;         // vetor maxHeap
     int tamanhoDeS; // tamanho do vetor de entrada
 
     int pai(int i);
@@ -199,19 +235,23 @@ private:
     void desce(int i);
 };
 
-int main()
+int main(int argc, char *argv[])
 {
     /* Para saber em qual indíce estamos no vetor
     de informações para imprimir */
     int ctrlVetorInfo = 0;
 
-    int inc;      // Valor inicial
-    int max;      // Valor final
-    int stp;      // Intervalo entre dois tamanhos
-    int rpt;      // Quantidade de repetições
-    int *entrada; // Vetor de entrada
+    int inc = stringParaInt(argv[1]); // Valor inicial
+    int max = stringParaInt(argv[2]); // Valor final
+    int stp = stringParaInt(argv[3]); // Intervalo entre dois tamanhos de n
+    int rpt = stringParaInt(argv[4]); // Quantidade de repetições a fazer
+    int *entrada;                     // Vetor de entrada com tamanho n
+
+    // Variáveis para medir o tempo de execução
     clock_t start, end;
     double timeTaken;
+
+    // Variáveis para medir a média do tempo de execução
     double totalABB;
     double totalAVL;
     double totalHEAP;
@@ -219,12 +259,12 @@ int main()
     double mediaAVL;
     double mediaHEAP;
 
-    printf("Digite o inicio, máximo, step e repetição respectivamente: \n");
-    scanf("%d %d %d %d", &inc, &max, &stp, &rpt);
+    // vetor que guarda os resultados para imprimir no final
     ImprimeInfo *info = new ImprimeInfo[max / stp];
 
     for (int n = inc; n <= max; n += stp)
     {
+        // Sempre zeramos as médias no começo para calcular com o novo n
         totalABB = 0;
         totalAVL = 0;
         totalHEAP = 0;
@@ -239,7 +279,7 @@ int main()
             // Aleatorizando o vetor de entrada
             entrada = geraEntradaAleatoria(n);
 
-            // ABB =============================================
+            // ABB ===================================================
             ABB *arvoreBinBusca = new ABB(); // Construindo a ABB
             for (int j = 0; j < n; j++)
                 arvoreBinBusca->insere(entrada[j]);
@@ -248,14 +288,14 @@ int main()
             printf("========== imprimindo ABB ordenado =========\n");
             printf("\n");
             start = clock();
-            arvoreBinBusca->escreve_ordenado();
+            arvoreBinBusca->escreve_ordenado(); // algoritmo de ordenação da arvore binária de busca
             end = clock();
             printf("============================================\n");
             printf("\n");
             timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
             totalABB += timeTaken;
 
-            // AVL =============================================
+            // AVL ====================================================
             AVL *arvoreAVL = new AVL(); // Construindo a arvore AVL
             for (int k = 0; k < n; k++)
                 arvoreAVL->insere(entrada[k]);
@@ -264,21 +304,21 @@ int main()
             printf("========== imprimindo AVL ordenado =========\n");
             printf("\n");
             start = clock();
-            arvoreAVL->escreve_ordenado();
+            arvoreAVL->escreve_ordenado(); // algoritmo de ordenação da árvore AVL
             end = clock();
             printf("============================================\n");
             printf("\n");
             timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
             totalAVL += timeTaken;
 
-            // HEAP =============================================
+            // HEAP ====================================================
             Heap *maxHeap = new Heap(n, &entrada); // Construindo o maxHeap
 
             // Calculando o tempo da ordenação do maxHeap
             printf("========== imprimindo HEAP ordenado =========\n");
             printf("\n");
             start = clock();
-            maxHeap->heapSort();
+            maxHeap->heapSort(); // algoritmo de ordenação do maxHeap
             end = clock();
             printf("ordenando HEAP, rpt = %d\n", i + 1);
             printf("============================================\n");
@@ -286,8 +326,8 @@ int main()
             timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
             totalHEAP += timeTaken;
         }
-        
-        // imprimindo as médias aritméticas
+
+        // calculando e imprimindo as médias aritméticas
         mediaABB = totalABB / rpt;
         mediaAVL = totalAVL / rpt;
         mediaHEAP = totalHEAP / rpt;
