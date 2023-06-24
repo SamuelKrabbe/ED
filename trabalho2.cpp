@@ -52,7 +52,7 @@ typedef struct paraImprimir
 } ImprimeInfo;
 
 //*************************************
-//****** FUNÇÕES PARA OS STRUCTs ******
+//********* FUNÇÕES ADICIONAIS ********
 //*************************************
 int getComprimentoStr(String str)
 {
