@@ -53,4 +53,4 @@ Visualização dos Resultados:
 
 Considerações Finais:
 
-    Este projeto fornece uma maneira fácil e conveniente de calcular e comparar as médias aritméticas dos tempos de execução de diferentes algoritmos. Certifique-se de ter o make e o gnuplot instalados antes de executar o programa. Para mudar as variáveis de entrada inc, max, stp e rpt entre no arquivo "Makefile" e altere os valores da variável ENTRA respectivamente.
+    Este projeto fornece uma maneira fácil e conveniente de calcular e comparar as médias aritméticas dos tempos de execução de diferentes algoritmos. Certifique-se de ter o make e o gnuplot instalados antes de executar o programa. Para mudar as variáveis de entrada inc, max, stp e rpt entre no arquivo "makefile" e altere os valores da variável ENTRA respectivamente.
