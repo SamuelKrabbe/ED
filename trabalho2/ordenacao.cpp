@@ -1,6 +1,6 @@
 /**************************************************
  *
- * Samuel de Oliveira Krabbe e Leonardo de Moraes Perin
+ * Aluno(s): Samuel de Oliveira Krabbe
  * Trabalho 1
  * Professor(a): Fabio Henrique Viduani Martinez
  *
