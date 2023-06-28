@@ -109,19 +109,40 @@ int stringParaInt(const char *str)
     return resultado * sinal;
 }
 
-void imprimeVetorInfo(ImprimeInfo *info, int tamanhoVetorInfo)
+void imprimeVetorInfo(ImprimeInfo *info, int tamanhoVetorInfo, const char *nomeArquivo)
 {
     /*
         Imprime as informações do vetor info conforme o layout
         pedido no trabalho
     */
+
+    // Imprime as informações no terminal/console
     printf("\n");
     printf("n          ABB           AVl          Heapsort     \n");
     printf("---------------------------------------------------\n");
     for (int i = 0; i < tamanhoVetorInfo; i++)
-    {
+        // Imprime os valores de n, mediaABB, mediaAVL e mediaHEAP
         printf("%d     %.6f     %.6f     %.6f\n", info[i].n, info[i].mediaABB, info[i].mediaAVL, info[i].mediaHEAP);
+
+    // Imprime no arquivo texto plotTrab2.txt para gerar o gráfico
+    FILE *arquivo = fopen(nomeArquivo, "w"); // Abre o arquivo no modo escrever (write)
+
+    if (arquivo == NULL)
+    {
+        printf("Falha ao abrir o arquivo.\n");
+        return;
     }
+
+    fprintf(arquivo, "\n");
+    fprintf(arquivo, "n          ABB           AVL          Heapsort     \n");
+    fprintf(arquivo, "---------------------------------------------------\n");
+
+    for (int i = 0; i < tamanhoVetorInfo; i++)
+    {
+        fprintf(arquivo, "%d     %.6f     %.6f     %.6f\n", info[i].n, info[i].mediaABB, info[i].mediaAVL, info[i].mediaHEAP);
+    }
+
+    fclose(arquivo); // Fecha o arquivo
 }
 
 //*************************************
@@ -239,6 +260,11 @@ private:
 
 int main(int argc, char *argv[])
 {
+    /*
+        Arquivo onde a saída é guardada para posteriormente gerar o gráfico
+    */
+    const char *nomeArquivo = "plotTrab2.txt";
+
     /* Para saber em qual indíce estamos no vetor
     de informações para imprimir */
     int ctrlVetorInfo = 0;
@@ -251,7 +277,7 @@ int main(int argc, char *argv[])
 
     // Variáveis para medir o tempo de execução
     clock_t start, end;
-    double timeTaken;
+    double tempoGasto;
 
     // Variáveis para medir a média do tempo de execução
     double totalABB;
@@ -283,6 +309,7 @@ int main(int argc, char *argv[])
 
             // ABB ===================================================
             ABB *arvoreBinBusca = new ABB(); // Construindo a ABB
+            
             for (int j = 0; j < n; j++)
                 arvoreBinBusca->insere(entrada[j]);
 
@@ -294,11 +321,12 @@ int main(int argc, char *argv[])
             end = clock();
             printf("============================================\n");
             printf("\n");
-            timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
-            totalABB += timeTaken;
+            tempoGasto = (double)(end - start) / CLOCKS_PER_SEC;
+            totalABB += tempoGasto;
 
             // AVL ====================================================
             AVL *arvoreAVL = new AVL(); // Construindo a arvore AVL
+            
             for (int k = 0; k < n; k++)
                 arvoreAVL->insere(entrada[k]);
 
@@ -310,8 +338,8 @@ int main(int argc, char *argv[])
             end = clock();
             printf("============================================\n");
             printf("\n");
-            timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
-            totalAVL += timeTaken;
+            tempoGasto = (double)(end - start) / CLOCKS_PER_SEC;
+            totalAVL += tempoGasto;
 
             // HEAP ====================================================
             Heap *maxHeap = new Heap(n, &entrada); // Construindo o maxHeap
@@ -325,8 +353,8 @@ int main(int argc, char *argv[])
             printf("ordenando HEAP, rpt = %d\n", i + 1);
             printf("============================================\n");
             printf("\n");
-            timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
-            totalHEAP += timeTaken;
+            tempoGasto = (double)(end - start) / CLOCKS_PER_SEC;
+            totalHEAP += tempoGasto;
         }
 
         // calculando e imprimindo as médias aritméticas
@@ -341,7 +369,7 @@ int main(int argc, char *argv[])
     }
 
     // imprimindo a saída conforme pedido no trabalho
-    imprimeVetorInfo(info, ctrlVetorInfo);
+    imprimeVetorInfo(info, ctrlVetorInfo, nomeArquivo);
     delete[] info;
     return 0;
 }
